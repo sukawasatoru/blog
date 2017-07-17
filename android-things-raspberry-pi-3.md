@@ -46,6 +46,6 @@ WiFi のネットワーク設定には Ethernet cable か Serial cable のどち
 
 refs.
 
-[Android Things | Android Things](https://developer.android.com/things/index.html)  
-[Raspberry Pi 3 | Android Things](https://developer.android.com/things/hardware/raspberrypi.html)  
-[System Image Downloads | Android Things](https://developer.android.com/things/preview/download.html)
+[Android Things \| Android Things](https://developer.android.com/things/index.html)  
+[Raspberry Pi 3 \| Android Things](https://developer.android.com/things/hardware/raspberrypi.html)  
+[System Image Downloads \| Android Things](https://developer.android.com/things/preview/download.html)
