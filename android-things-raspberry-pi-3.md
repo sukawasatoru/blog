@@ -2,7 +2,7 @@ Android Things
 ==============
 
 Raspberry Pi 3 に Android Things を install したときのメモ。  
-[https://developer.android.com/things/hardware/raspberrypi.html](https://developer.android.com/things/hardware/raspberrypi.html) を上から読んでいけばその通りに設定できたので、とくに難しいことは無かった。  
+[https://developer.android.com/things/hardware/raspberrypi.html](https://developer.android.com/things/hardware/raspberrypi.html) を上から読んでいけばその通りに設定できたので、とくに難しいことは無かった。リンク張ってあったり丁寧に書いてあったので困ることは無いはず。  
 [Console](https://partner.android.com/things/console) で作成した Image は試していないです。
 
 使ったもの
