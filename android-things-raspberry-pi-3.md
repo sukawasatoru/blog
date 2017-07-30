@@ -1,10 +1,10 @@
 Android Things
 ==============
 
-- [Install](#Install)
+- [Install](#install)
     - [使ったもの](#使ったもの)
     - [手順](#手順)
-- [OTA](#OTA)
+- [OTA](#ota)
 
 
 Install
