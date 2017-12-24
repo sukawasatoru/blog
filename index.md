@@ -5,3 +5,4 @@ Evernote に溜めてあるノートを時間を見つけて GitHub で公開し
 
 [android-emulator](android-emulator)  
 [android-things-raspberry-pi-3](android-things-raspberry-pi-3)
+[jenkins](jenkins)
