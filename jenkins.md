@@ -275,7 +275,7 @@ bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh)
 Install できたら 2つの netdata を Jenkins で使用している NGINX から参照できるよう設定する。
 設定方法は [Running behind nginx · firehol/netdata Wiki](https://github.com/firehol/netdata/wiki/Running-behind-nginx#as-a-subfolder-for-multiple-netdata-servers-via-one-nginx) の Document を参照して行う。ほぼ書かれているとおりに行って問題ない。
 
-refs.
+refs.  
 [The leading operating system for PCs, IoT devices, servers and the cloud | Ubuntu](https://www.ubuntu.com/)  
 [Jenkins](https://jenkins.io/)  
 [Debian Repository for Jenkins](https://pkg.jenkins.io/debian/)  
