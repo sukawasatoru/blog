@@ -19,7 +19,7 @@ Memory は 1GB を設定した。その他の VM の設定は Default で問題�
 Jenkins の Install 前の準備
 ---------------------------
 
-Install が終わって login 画面まで進んだら login し Jenkins と NGINX を設定する前に作業しやすいように最低限の変更を行った
+OS の Install が終わって login 画面まで進んだら login し Jenkins と NGINX を設定する前に作業しやすいように最低限の変更を行った
 
 ```bash
 # visudo のために default の editor を変更
@@ -63,7 +63,7 @@ sudo apt install mosh
 ip a
 ```
 
-作成した鍵は mac から scp で秘密鍵を転送する
+作成した鍵は mac から scp で秘密鍵を転送する。
 
 Jenkins の Install
 ------------------
