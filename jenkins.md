@@ -6,7 +6,7 @@ GitHub のために余っている MacBook Pro に Ubuntu と Jenkins Server と
 OS の Install
 -------------
 
-Ubuntu のサイト [The leading operating system for PCs, IoT devices, servers and the cloud | Ubuntu](https://www.ubuntu.com/) から Server 版 Image を Download する。
+Ubuntu のサイト [The leading operating system for PCs, IoT devices, servers and the cloud \| Ubuntu](https://www.ubuntu.com/) から Server 版 Image を Download する。
 
 version は一般的には LTS で良いと思う。OS を設定するのが好きとか Upgrade の手間を惜しまないのであれば LTS とか気にせず最新のでも良い。
 
@@ -100,7 +100,7 @@ Firewall が有効になっていないので `http://<ip>:8080/jenkins` から�
 NGINX の Install
 ----------------
 
-`apt install nginx` で Install を行う。
+`apt install nginx` で Install を行う
 
 Install 後 NGINX を経由して Jenkins を使用できるよう設定を変更する。
 Ubuntu の NGINX は `/etc/nginx/sites-available` に設定を書き `/etc/nginx/sites-enable` に Symbolic link を張ることで設定を行う。
@@ -111,7 +111,7 @@ Ubuntu の NGINX は `/etc/nginx/sites-available` に設定を書き `/etc/nginx
 Jenkins の setup
 ----------------
 
-NGINX で設定した URI から画面通りに進める。
+NGINX で設定した URI から画面通りに進める
 
 途中で Install する Plugin を聞かれるがこの段階では全部チェックを外してしまって良い。
 設定が完了するとお馴染みの top page に遷移する。この後お好みで自分の user account を作成しても良いしこのまま admin account で操作しても良い。
@@ -183,7 +183,7 @@ chmod 644 .ssh/authorized_keys
 Jenkins の Slave の設定
 -----------------------
 
-秘密鍵は Jenkins の *Credentials* に Copy Paste を行い設定する。
+秘密鍵は Jenkins の *Credentials* に Copy Paste を行い設定する
 
 Credentials に登録したらそれを用いて Slave を登録する。
 *Manage Jenkins* -> *Manage Nodes* から *New Node* で設定を行う。
@@ -198,7 +198,7 @@ Credentials に登録したらそれを用いて Slave を登録する。
 GitHub personal access token の設定
 -----------------------------------
 
-GitHub の Repository を pull、Build Status の更新をするために access token を設定する。
+GitHub の Repository を pull、Build Status の更新をするために access token を設定する
 
 GitHub の *Settings* から *Developer settings* -> *Personal access tokens* を選択し *Generate new token* の Button を押す。
 必要は権限は *Repo* の *Full control of private repositories* だけでよい。private repository を使用していない場合など必要に応じてさらに権限を絞っても良い。
@@ -213,7 +213,7 @@ GitHub の *Settings* から *Developer settings* -> *Personal access tokens* �
 Build 確認
 ----------
 
-Build できるまで設定できたので実際に Build を行い設定してみる。
+Build できるまで設定できたので実際に Build を行い設定してみる
 
 Jenkins の *New Item* から *GitHub Organization* を選択する。  
 *GitHub Organization* の *Credentials* には GitHub で生成した token を指定し *owner* を適切に設定する。  
@@ -251,7 +251,7 @@ pipeline {
 gradle.properties の設定
 ------------------------
 
-Slave に Build 用に作成した account の `$HOME/.gradle/gradle.properties` に gradle の設定を行う。
+Slave に Build 用に作成した account の `$HOME/.gradle/gradle.properties` に gradle の設定を行う	
 
 no-daemon と android cache の設定は恐らく必要でそのほか JVM の memory の設定も行う。
 
@@ -273,7 +273,7 @@ bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh)
 
 
 Install できたら 2つの netdata を Jenkins で使用している NGINX から参照できるよう設定する。
-設定方法は [Running behind nginx · firehol/netdata Wiki](https://github.com/firehol/netdata/wiki/Running-behind-nginx#as-a-subfolder-for-multiple-netdata-servers-via-one-nginx) の Document を参照して行う。ほぼ書かれているとおりに行って問題ない。
+設定は Document [Running behind nginx · firehol/netdata Wiki](https://github.com/firehol/netdata/wiki/Running-behind-nginx#as-a-subfolder-for-multiple-netdata-servers-via-one-nginx) を参照して行う。ほぼ書かれているとおりに行って問題ない。
 
 refs.  
 [The leading operating system for PCs, IoT devices, servers and the cloud | Ubuntu](https://www.ubuntu.com/)  
