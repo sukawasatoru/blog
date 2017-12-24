@@ -3,6 +3,18 @@ Jenkins
 
 GitHub のために余っている MacBook Pro に Ubuntu と Jenkins Server と Android を build するための Slave を setup したときのメモ
 
+- [OS の Install](#os-の-install)
+- [Jenkins の Install 前の準備](#jenkins-の-install-前の準備)
+- [Jenkins の Install](#jenkins-の-install)
+- [NGINX の Install](#nginx-の-install)
+- [Jenkins の setup](#jenkins-の-setup)
+- [Slave の setup](#slave-の-setup)
+- [Jenkins の Slave の設定](#jenkins-の-slave-の設定)
+- [GitHub personal access token の設定](#github-personal-access-token-の設定)
+- [Build 確認](#build-確認)
+- [gradle.properties の設定](#gradleproperties-の設定)
+- [netdata の Install と NGINX の設定](#netdata-の-install-と-nginx-の設定)
+
 OS の Install
 -------------
 
