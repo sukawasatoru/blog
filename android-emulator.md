@@ -59,3 +59,9 @@ Android TV の avd を動かすために追加で以下の設定を行った。
  tag.id=android-tv
 +vm.heapSize=192
 ```
+
+emulator の起動
+---------------
+
+`emulator -avd 27tv-x86` で起動する。  
+help は `emulator -help` で確認できる。
