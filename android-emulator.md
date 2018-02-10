@@ -60,6 +60,19 @@ Android TV の avd を動かすために追加で以下の設定を行った。
 +vm.heapSize=192
 ```
 
+HAXM の install (macOS)
+-----------------------
+
+sdkmanager の `extras;intel;Hardware_Accelerated_Execution_Manager` で download できる HAXM を install する。
+
+$ANDROID_SDK_ROOT/extras/intel/Hardware_Accelerated_Execution_Manager に download されるこれを CLI から install や uninstall するためにはまず実行権限を付与する必要がある。
+
+`chmod +x HAXM\ installation silent_install.sh`
+
+そのあと `HAXM\ installation` で install できる。
+
+help は `HAXM\ installation -h` または `silent_install.sh -h` で確認できる。
+
 emulator の起動
 ---------------
 
