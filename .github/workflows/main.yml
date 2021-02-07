@@ -37,6 +37,8 @@ jobs:
           name: stork-builder
           path: tools/stork-builder/stork-builder
   stork-index:
+    needs:
+      - build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
