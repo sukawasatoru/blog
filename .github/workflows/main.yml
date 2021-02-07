@@ -49,7 +49,9 @@ jobs:
         with:
           name: stork-builder
       - name: build
-        run: ./stork-builder -o blog.st .
+        run: |
+          chmod +x stork-builder
+          ./stork-builder -o blog.st .
       - uses: actions/upload-artifact@v2
         with:
           name: stork-index
