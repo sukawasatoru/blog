@@ -1,0 +1,42 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  build:
+    # https://github.com/actions/virtual-environments#available-environments
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        shell: bash -l -eo pipefail {0}
+        run: |
+          nvm install $(cat .nvmrc)
+          nvm use
+          npm ci
+          npm run export
+          touch out/.nojekyll
+          cp CNAME out
+      - uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: out
+  publish:
+    if: github.event_name == 'push' && github.event.ref == 'refs/heads/master' && github.repository == 'sukawasatoru/blog'
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: artifact-ghpages
+      - name: Publish
+        run: |
+          git init
+          git add .
+          git -c user.name='ci' -c user.email='ci' commit -m 'Deploy application'
+          git push -f -q https://git:${{ secrets.github_token }}@github.com/${{ github.repository }} HEAD:gh-pages
