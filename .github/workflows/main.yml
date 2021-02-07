@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: artifact-ghpages
+          name: artifact
       - name: Publish
         run: |
           git init
