@@ -45,6 +45,9 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: artifact
+      - uses: actions/download-artifact@v2
+        with:
+          name: stork-builder
       - name: build
         run: ./stork-builder -o blog.st .
       - uses: actions/upload-artifact@v2
