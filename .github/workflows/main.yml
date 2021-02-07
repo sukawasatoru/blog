@@ -35,7 +35,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: stork-builder
-          path: tools/stork-builder/stork-builder
+          path: tools/stork-builder/target/release/stork-builder
   stork-index:
     needs:
       - build
@@ -56,6 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
+      - stork-index
     steps:
       - uses: actions/download-artifact@v2
         with:
