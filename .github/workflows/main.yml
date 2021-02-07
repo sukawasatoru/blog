@@ -49,6 +49,9 @@ jobs:
         with:
           name: stork-builder
       - name: build
+        env:
+          RUST_LOG: stork_builder=info
+          RUST_BACKTRACE: 1
         run: |
           chmod +x stork-builder
           ./stork-builder -o blog.st .
