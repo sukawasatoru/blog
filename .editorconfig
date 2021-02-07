@@ -1,0 +1,64 @@
+root = true
+
+[COMMIT_EDITMSG]
+max_line_length = off
+
+[{Makefile,*.mk}]
+indent_style = tab
+indent_size = 8
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = off
+
+[*.css]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.html]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = off
+
+[*.{js,jsx,ts,tsx}]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 120
+
+[*.json]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = off
+
+[*.md]
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = false
+insert_final_newline = true
+max_line_length = off
+
+[*.{yaml,yml}]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 120

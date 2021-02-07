@@ -48,7 +48,7 @@ Android Things の起動、ネットワーク設定
 4. しばらくすると boot animation が終わり Home っぽい画面に遷移する
 5. Serial から以下を入力し WiFi を設定する  
     `am startservice -n com.google.wifisetup/.WifiSetupService -a WifiSetupService.Connect -e ssid <SSID> -e passphrase <password>`
-6. 1分弱待つと Home に <SSID> や IP Address が表示される
+6. 1分弱待つと Home に `<SSID>` や IP Address が表示される
 7. `adb connect <IP Address>` で connect 出来れば完了
 
 OTA
