@@ -39,6 +39,7 @@ jobs:
   stork-index:
     needs:
       - build
+      - stork-builder
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
