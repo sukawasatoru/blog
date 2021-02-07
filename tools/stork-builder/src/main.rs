@@ -73,16 +73,22 @@ async fn main() -> Fallible<()> {
     };
 
     for entry in files {
-        if entry
-            .extension()
-            .with_context(|| format!("extension: {:?}", entry))?
-            .to_str()
-            .with_context(|| format!("to_str: {:?}", entry))?
-            != "html"
-        {
-            debug!(?entry, "not html");
-            continue;
-        }
+        match entry.extension() {
+            Some(extension) => {
+                if extension
+                    .to_str()
+                    .with_context(|| format!("to_str: {:?}", entry))?
+                    != "html"
+                {
+                    debug!(?entry, "not html");
+                    continue;
+                }
+            }
+            None => {
+                debug!(?entry, "no extension");
+                continue;
+            }
+        };
 
         let path_str = std::fs::canonicalize(&entry)?;
         let path_str = path_str
