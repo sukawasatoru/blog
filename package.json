@@ -14,7 +14,8 @@
     "bundle-analyzer": "BUNDLE_ANALYZER=1 npm run build",
     "dev": "next dev",
     "export": "next build && next export",
-    "start": "next start"
+    "start": "next start",
+    "stork": "ln -s ../out/blog.st public/blog.st"
   },
   "repository": {
     "type": "git",

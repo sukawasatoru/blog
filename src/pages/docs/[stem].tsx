@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import Stork from "@/components/stork";
 import {retrieveDocs} from "@/function/docs";
 import {readFile} from "fs/promises";
 import matter from "gray-matter";
@@ -39,9 +40,14 @@ const Docs: NextPage<Props> = props => {
       </title>
     </Head>
     <section className="main-content">
-      <p>
-        {hydrate(props.mdxSource, {})}
-      </p>
+      <header style={{marginBottom: '64px'}}>
+        <Stork />
+      </header>
+      <main>
+        <p>
+          {hydrate(props.mdxSource, {})}
+        </p>
+      </main>
       <footer className="site-footer">
         <Link href="/">
           <a>
@@ -51,7 +57,7 @@ const Docs: NextPage<Props> = props => {
       </footer>
     </section>
   </>;
-}
+};
 
 interface StaticPath extends ParsedUrlQuery {
   // [stem].tsx
