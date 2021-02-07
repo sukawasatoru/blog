@@ -25,6 +25,29 @@ jobs:
         with:
           name: artifact
           path: out
+  stork-builder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: build
+        working-directory: tools/stork-builder
+        run: cargo build --verbose --release
+      - uses: actions/upload-artifact@v2
+        with:
+          name: stork-builder
+          path: tools/stork-builder/stork-builder
+  stork-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: artifact
+      - name: build
+        run: ./stork-builder -o blog.st .
+      - uses: actions/upload-artifact@v2
+        with:
+          name: stork-index
+          path: blog.st
   publish:
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/master' && github.repository == 'sukawasatoru/blog'
     runs-on: ubuntu-latest
@@ -34,6 +57,9 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: artifact
+      - uses: actions/download-artifact@v2
+        with:
+          name: stork-index
       - name: Publish
         run: |
           git init
