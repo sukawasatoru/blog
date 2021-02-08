@@ -20,7 +20,7 @@ jobs:
           npm ci
           npm run export
           touch out/.nojekyll
-          cp CNAME out
+          curl https://raw.githubusercontent.com/sukawasatoru/blog/gh-pages/CNAME > out/CNAME
       - uses: actions/upload-artifact@v2
         with:
           name: artifact
