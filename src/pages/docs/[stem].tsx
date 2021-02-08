@@ -17,17 +17,14 @@
 import Stork from "@/components/stork";
 import {retrieveDocs} from "@/function/docs";
 import {readFile} from "fs/promises";
-import matter from "gray-matter";
 import {GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage} from "next";
-import hydrate from "next-mdx-remote/hydrate";
 import renderToString from "next-mdx-remote/render-to-string";
-import {MdxRemote} from "next-mdx-remote/types";
 import Head from "next/head";
-import {ParsedUrlQuery} from "querystring";
 import Link from "next/link";
+import {ParsedUrlQuery} from "querystring";
 
 type Props = {
-  mdxSource: MdxRemote.Source;
+  renderedMD: string;
   stem: string;
 };
 
@@ -41,12 +38,10 @@ const Docs: NextPage<Props> = props => {
     </Head>
     <section className="main-content">
       <header style={{marginBottom: '64px'}}>
-        <Stork />
+        <Stork/>
       </header>
       <main>
-        <p>
-          {hydrate(props.mdxSource, {})}
-        </p>
+        <div dangerouslySetInnerHTML={{__html: props.renderedMD}}/>
       </main>
       <footer className="site-footer">
         <Link href="/">
@@ -82,12 +77,12 @@ export const getStaticProps: GetStaticProps<Props, StaticPath> = async context =
   const stem = context.params!.stem;
   const docs = await retrieveDocs();
   const filepath = docs.find(value => value.stem === stem)!.filepath;
-  const matterFile = matter((await readFile(filepath)));
-  const mdxSource = await renderToString(matterFile.content, {scope: matterFile.data});
+  const matterFile = (await readFile(filepath)).toString();
+  const mdxSource = await renderToString(matterFile);
 
   return {
     props: {
-      mdxSource,
+      renderedMD: mdxSource.renderedOutput,
       stem,
     },
   };
