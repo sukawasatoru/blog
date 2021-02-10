@@ -17,6 +17,7 @@ jobs:
         run: |
           nvm install $(cat .nvmrc)
           nvm use
+          npm run docs-parser
           npm ci
           npm run export
           touch out/.nojekyll

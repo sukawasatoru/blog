@@ -13,6 +13,7 @@
     "build": "next build",
     "bundle-analyzer": "BUNDLE_ANALYZER=1 npm run build",
     "dev": "next dev",
+    "docs-parser": "cd tools/docs-parser && wasm-pack build -- --no-default-features --features wasm",
     "export": "next build && next export",
     "start": "next start",
     "stork": "ln -s ../out/blog.st public/blog.st"
@@ -27,6 +28,7 @@
     "@types/react-dom": "17.0.0",
     "@typescript-eslint/eslint-plugin": "4.14.2",
     "@typescript-eslint/parser": "4.14.2",
+    "docs-parser": "file:./tools/docs-parser/pkg",
     "eslint": "7.19.0",
     "eslint-plugin-react-hooks": "4.2.0",
     "fork-ts-checker-webpack-plugin": "6.1.0",

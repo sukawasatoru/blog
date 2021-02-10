@@ -1,0 +1,47 @@
+[package]
+name = "docs-parser"
+version = "0.1.0"
+authors = ["Satoru Sukawa <sukawasatoru.github@outlook.jp>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["tracing", "tracing-subscriber"]
+wasm = ["console_error_panic_hook"]
+
+[dependencies]
+chrono = "=0.4.19"
+regex = "=1.4.3"
+
+[dependencies.console_error_panic_hook]
+version = "=0.1.6"
+optional = true
+
+[dependencies.serde]
+version = "=1.0.123"
+features = ["derive"]
+
+[dependencies.tracing]
+version = "=0.1.23"
+optional = true
+
+[dependencies.tracing-subscriber]
+version = "=0.2.15"
+optional = true
+
+[dependencies.wasm-bindgen]
+version = "=0.2.70"
+features = ["serde-serialize"]
+
+[dependencies.wee_alloc]
+version = "=0.4.5"
+optional = true
+
+[dev-dependencies]
+wasm-bindgen-test = "=0.3.20"
+
+[profile.release]
+opt-level = "s"
+lto = true

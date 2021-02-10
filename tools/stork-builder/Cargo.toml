@@ -13,10 +13,13 @@ structopt = "=0.3.21"
 tracing = "=0.1.23"
 tracing-subscriber = "=0.2.15"
 
+[dependencies.docs-parser]
+path = "../docs-parser"
+
 [dependencies.stork-search]
 version = "=1.0.4"
 default-features = false
 
 [dependencies.tokio]
 version = "=1.2.0"
-features = ["fs", "macros", "rt-multi-thread"]
+features = ["fs", "io-util", "macros", "rt-multi-thread"]

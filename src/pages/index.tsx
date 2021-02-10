@@ -57,15 +57,13 @@ const Index: NextPage<Props> = (props) => {
       <p>
         Hello!
       </p>
-      <p>
-        {docLinks.map(value =>
-          <ul>
-            <li>
-              {value}
-            </li>
-          </ul>
-        )}
-      </p>
+      {docLinks.map((value, i) =>
+        <ul key={i}>
+          <li>
+            {value}
+          </li>
+        </ul>
+      )}
     </section>
   </>;
 };

@@ -19,6 +19,7 @@ use futures::future::BoxFuture;
 use futures::FutureExt;
 use std::path::{Path, PathBuf};
 use structopt::StructOpt;
+use tokio::io::AsyncReadExt;
 use tracing::{debug, info};
 
 #[derive(StructOpt)]
@@ -26,6 +27,10 @@ struct Opt {
     /// The path of the out directory
     #[structopt(parse(from_os_str))]
     dir: PathBuf,
+
+    /// The path of source of the docs directory
+    #[structopt(short, long, parse(from_os_str))]
+    md_dir: PathBuf,
 
     /// Destination of the stork file
     #[structopt(short, long, parse(from_os_str))]
@@ -49,15 +54,14 @@ async fn main() -> Fallible<()> {
     }
 
     let files = walk_dir(&opt.dir).await?;
-
     let out_dir = std::fs::canonicalize(&opt.dir)?;
-    let out_dir = out_dir
-        .to_str()
-        .with_context(|| format!("to_str: {:?}", out_dir))?;
 
     let mut stork_config = stork_search::config::Config {
         input: stork_search::config::InputConfig {
-            base_directory: out_dir.to_string(),
+            base_directory: out_dir
+                .to_str()
+                .with_context(|| format!("out_dir.to_str: {:?}", out_dir))?
+                .to_string(),
             stemming: stork_search::config::StemmingConfig::None,
             minimum_indexed_substring_length: 2,
             ..Default::default()
@@ -66,13 +70,15 @@ async fn main() -> Fallible<()> {
             filename: opt
                 .out
                 .to_str()
-                .with_context(|| format!("to_str: {:?}", opt.out))?
+                .with_context(|| format!("out.to_str: {:?}", opt.out))?
                 .to_string(),
             ..Default::default()
         },
     };
 
+    let mut buf_str = String::new();
     for entry in files {
+        let entry = std::fs::canonicalize(entry)?;
         match entry.extension() {
             Some(extension) => {
                 if extension
@@ -90,38 +96,77 @@ async fn main() -> Fallible<()> {
             }
         };
 
-        let path_str = std::fs::canonicalize(&entry)?;
-        let path_str = path_str
+        let stork_entry_url = entry.strip_prefix(&out_dir)?.with_extension("");
+
+        debug!(?stork_entry_url);
+        match stork_entry_url
             .to_str()
-            .with_context(|| format!("to_str: {:?}", path_str))?;
-        let trimmed = path_str
-            .strip_prefix(out_dir)
-            .with_context(|| format!("strip_prefix: {:?}", path_str))?;
+            .with_context(|| format!("to_str: {:?}", entry))?
+        {
+            "index" => {
+                debug!(?entry, "skip index.html of root directory");
+                continue;
+            }
+            "404" => {
+                debug!(?entry, "skip error page");
+                continue;
+            }
+            _ => {
+                // do nothing.
+            }
+        };
 
-        let stork_entry_url = trimmed.trim_end_matches(".html");
+        let stem = entry
+            .file_stem()
+            .with_context(|| format!("entry.stem: {:?}", entry))?
+            .to_str()
+            .with_context(|| format!("entry.to_str: {:?}", entry))?;
 
-        // remove prefix "/".
-        let stork_entry_path = &trimmed[1..];
+        let md_info = match entry.parent() {
+            Some(parent_path) => match parent_path
+                .file_name()
+                .with_context(|| format!("parent_path.file_name(): {:?}", parent_path))?
+                .to_str()
+                .with_context(|| format!("parent.to_str: {:?}", entry))?
+            {
+                "docs" => {
+                    let mut md_path = opt.md_dir.join(stem);
+                    md_path.set_extension("md");
 
-        if stork_entry_path == "index.html" {
-            debug!(?entry, "skip index.html of root directory");
-            continue;
-        }
-
-        if stork_entry_path == "404.html" {
-            debug!(?entry, "skip error page");
-            continue;
-        }
+                    debug!(?md_path);
+                    buf_str.clear();
+                    tokio::io::BufReader::new(tokio::fs::File::open(&md_path).await?)
+                        .read_to_string(&mut buf_str)
+                        .await?;
+                    match docs_parser::parse_docs(&buf_str) {
+                        Some(data) => Some(data),
+                        None => {
+                            anyhow::bail!("unexpected data");
+                        }
+                    }
+                }
+                _ => None,
+            },
+            None => None,
+        };
 
         let stork_entity = stork_search::config::File {
-            title: entry
-                .file_stem()
-                .with_context(|| format!("entry.stem: {:?}", entry))?
+            title: md_info
+                .map(|data| data.title())
+                .unwrap_or_else(|| stem.to_string()),
+            url: std::env::var("PATH_CONTEXT")
+                .unwrap_or_else(|_| "/".into())
+                .parse::<PathBuf>()?
+                .join(stork_entry_url)
                 .to_str()
-                .with_context(|| format!("entry.to_str: {:?}", entry))?
+                .with_context(|| format!(""))?
                 .to_string(),
-            url: stork_entry_url.into(),
-            source: stork_search::config::DataSource::FilePath(stork_entry_path.into()),
+            source: stork_search::config::DataSource::FilePath(
+                entry
+                    .to_str()
+                    .with_context(|| format!("entry.to_str: {:?}", entry))?
+                    .to_string(),
+            ),
             ..Default::default()
         };
         info!(?stork_entity);
