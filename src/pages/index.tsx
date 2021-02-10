@@ -15,14 +15,21 @@
  */
 
 import Stork from "@/components/stork";
-import {DocEntry, retrieveDocs} from "@/function/docs";
+import {retrieveDocs} from "@/function/docs";
 import {GetStaticProps, NextPage} from "next";
 import Head from "next/head";
 import Link from "next/link";
+import {Temporal} from "proposal-temporal";
 import {ReactElement} from "react";
 
+type PropDocEntry = {
+  stem: string;
+  title: string;
+  firstEdition: string;
+};
+
 type Props = {
-  docEntries: DocEntry[];
+  docEntries: PropDocEntry[];
 };
 
 const Index: NextPage<Props> = (props) => {
@@ -31,7 +38,7 @@ const Index: NextPage<Props> = (props) => {
   for (const entry of props.docEntries) {
     docLinks.push(<Link href={`/docs/${entry.stem}`}>
       <a>
-        {entry.stem}
+        {`${entry.firstEdition}: ${entry.title}`}
       </a>
     </Link>);
   }
@@ -45,7 +52,7 @@ const Index: NextPage<Props> = (props) => {
     </Head>
     <section className="main-content">
       <header style={{marginBottom: '64px'}}>
-        <Stork />
+        <Stork/>
       </header>
       <p>
         Hello!
@@ -64,9 +71,18 @@ const Index: NextPage<Props> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
+  const entries = await retrieveDocs();
+  entries.sort((a, b) => Temporal.PlainDate.compare(b.firstEdition, a.firstEdition));
+
+  const docEntries: Props['docEntries'] = entries.map(({title, stem, firstEdition}) => ({
+    title,
+    stem,
+    firstEdition: `${firstEdition.year}-${firstEdition.month}-${firstEdition.day}`,
+  }));
+
   return {
     props: {
-      docEntries: await retrieveDocs(),
+      docEntries,
     },
   };
 };

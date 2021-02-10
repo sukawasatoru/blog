@@ -36,3 +36,8 @@ Boot や EFI という名前のディレクトリやファイルが展開され�
 ref.  
 [Download a recovery image for your Surface](https://support.microsoft.com/surfacerecoveryimage)  
 [Creating and using a USB recovery drive](https://support.microsoft.com/help/4023512/surface-creating-and-using-a-usb-recovery-drive)
+
+- - -
+
+timestamp  
+2018-01-21 (First edition)

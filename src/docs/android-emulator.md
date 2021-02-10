@@ -78,3 +78,9 @@ emulator の起動
 
 `emulator -avd <name>` で起動する。  
 help は `emulator -help` で確認できる。
+
+- - -
+
+timestamp  
+2017-07-17 (First edition)  
+2018-02-10 (Last modify)

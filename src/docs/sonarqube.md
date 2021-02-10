@@ -13,3 +13,8 @@ sonarqube から :sonarqube に変更すると通る
  -> 解析されていないだけなのでこれは使用することは出来ない
 
 ./gradlew --debug -Dsonar.organization=sukawasatoru-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=31ec2b9759cb606d07b14ab4d61c1a38e6cfa4c5 -Dsonar.projectName=android-tinytable -Dsonar.projectKey=android-tinytable -Dsonar.verbose=true :onarqube
+
+- - -
+
+timestamp  
+2018-02-10 (First edition)

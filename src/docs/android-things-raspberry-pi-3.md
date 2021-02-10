@@ -174,3 +174,9 @@ refs.
 [System Image Downloads \| Android Things](https://developer.android.com/things/preview/download.html)  
 [Android Things Console](https://partner.android.com/things/console)  
 [Create a Bundle \| Android Things](https://developer.android.com/things/console/app_bundle.html)
+
+- - -
+
+timestamp  
+2017-07-17 (First edition)  
+2020-02-07 (Last modify)
