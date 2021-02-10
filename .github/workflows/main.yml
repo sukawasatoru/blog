@@ -43,9 +43,11 @@ jobs:
       - stork-builder
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
         with:
           name: artifact
+          path: out
       - uses: actions/download-artifact@v2
         with:
           name: stork-builder
@@ -55,7 +57,7 @@ jobs:
           RUST_BACKTRACE: 1
         run: |
           chmod +x stork-builder
-          ./stork-builder -o blog.st .
+          ./stork-builder -o blog.st -m src/docs out
       - uses: actions/upload-artifact@v2
         with:
           name: stork-index
