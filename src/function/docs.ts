@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import {PathLike} from "fs";
 import {readdir, readFile, stat} from "fs/promises";
 import {Temporal} from "proposal-temporal";
