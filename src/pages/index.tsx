@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import Stork from "@/components/stork";
+import DefaultHeader from "@/components/DefaultHeader";
 import {retrieveDocs} from "@/function/docs";
 import {GetStaticProps, NextPage} from "next";
 import Head from "next/head";
@@ -51,9 +51,7 @@ const Index: NextPage<Props> = (props) => {
       </title>
     </Head>
     <section className="main-content">
-      <header style={{marginBottom: '64px'}}>
-        <Stork/>
-      </header>
+      <DefaultHeader/>
       <p>
         Hello!
       </p>

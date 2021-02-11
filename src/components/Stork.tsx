@@ -55,10 +55,9 @@ const Stork: FunctionComponent<unknown> = () => {
     </Head>
     <div className="stork-wrapper">
       <input className="stork-input" data-stork={storkName} placeholder="Search..."/>
-      <div className="stork-progress" style={{width: '100%', opacity: 0}}></div>
-      <div className="stork-output" data-stork={`${storkName}-output`}></div>
+      <div className="stork-output" data-stork={`${storkName}-output`} />
     </div>
-    <script src="https://files.stork-search.net/stork.js"></script>
+    <script src="https://files.stork-search.net/stork.js" />
   </>;
 };
 

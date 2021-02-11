@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import Stork from "@/components/stork";
+import DefaultHeader from "@/components/DefaultHeader";
 import {retrieveDocs} from "@/function/docs";
 import {readFile} from "fs/promises";
 import {GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage} from "next";
@@ -39,9 +39,7 @@ const Docs: NextPage<Props> = props => {
       </title>
     </Head>
     <section className="main-content">
-      <header style={{marginBottom: '64px'}}>
-        <Stork/>
-      </header>
+      <DefaultHeader/>
       <main>
         <div dangerouslySetInnerHTML={{__html: props.renderedMD}}/>
       </main>
@@ -53,10 +51,10 @@ const Docs: NextPage<Props> = props => {
         </Link>
       </footer>
     </section>
-    <style  jsx>{`
-        .main-content {
-          font-size: 16px
-        }
+    <style jsx>{`
+      .main-content {
+        font-size: 16px
+      }
     `}</style>
   </>;
 };
