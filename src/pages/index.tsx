@@ -73,7 +73,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   const docEntries: Props['docEntries'] = entries.map(({title, stem, firstEdition}) => ({
     title,
     stem,
-    firstEdition: `${firstEdition.year}-${firstEdition.month}-${firstEdition.day}`,
+    firstEdition: firstEdition.toString(),
   }));
 
   return {
