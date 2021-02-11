@@ -1,0 +1,17 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"name": "README",
+			"folder_include_patterns": ["nothing"],
+			"file_include_patterns": ["*.md"]
+		},
+		{
+			"path": "src/docs",
+		}
+	],
+	"settings": {
+		"enable_autoreload": true
+	}
+}

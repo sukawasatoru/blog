@@ -22,6 +22,8 @@ import renderToString from "next-mdx-remote/render-to-string";
 import Head from "next/head";
 import Link from "next/link";
 import {ParsedUrlQuery} from "querystring";
+import {FunctionComponent, ReactElement} from "react";
+import {Prism} from "react-syntax-highlighter";
 
 type Props = {
   renderedMD: string;
@@ -51,6 +53,11 @@ const Docs: NextPage<Props> = props => {
         </Link>
       </footer>
     </section>
+    <style  jsx>{`
+        .main-content {
+          font-size: 16px
+        }
+    `}</style>
   </>;
 };
 
@@ -73,12 +80,29 @@ export const getStaticPaths: GetStaticPaths<StaticPath> = async () => {
   };
 };
 
+const CodeBlock: FunctionComponent = (props) => {
+  const children = props.children as ReactElement;
+  if (children.props?.originalType === 'code' && children.props.className) {
+    return <Prism language={children.props.className.replace(/^language-/, '')}>
+      {children.props.children}
+    </Prism>;
+  } else {
+    return <pre>
+      {props.children}
+    </pre>;
+  }
+}
+
 export const getStaticProps: GetStaticProps<Props, StaticPath> = async context => {
   const stem = context.params!.stem;
   const docs = await retrieveDocs();
   const filepath = docs.find(value => value.stem === stem)!.filepath;
   const matterFile = (await readFile(filepath)).toString();
-  const mdxSource = await renderToString(matterFile);
+  const mdxSource = await renderToString(matterFile, {
+    components: {
+      pre: CodeBlock,
+    },
+  });
 
   return {
     props: {
