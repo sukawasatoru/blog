@@ -51,14 +51,6 @@ export const retrieveDocs = async (): Promise<DocEntry[]> => {
       throw new Error(`failed to parse document: ${filepath}`);
     }
 
-    if (!docInfo.title) {
-      throw new Error(`the title is undefined: ${filepath}`);
-    }
-
-    if (!docInfo.firstEdition) {
-      throw new Error(`the firstEdition is undefined: ${filepath}`);
-    }
-
     ret.push({
       filepath,
       stem: filename.substring(0, filename.length - ".md".length),
