@@ -10,8 +10,5 @@
 		{
 			"path": "src/docs",
 		}
-	],
-	"settings": {
-		"enable_autoreload": true
-	}
+	]
 }
