@@ -22,6 +22,7 @@ jobs:
           curl -L https://github.com/rustwasm/wasm-pack/releases/download/v0.9.1/wasm-pack-v0.9.1-x86_64-unknown-linux-musl.tar.gz | tar -zx --strip-components 1
           mv wasm-pack bin
           npm run docs-parser
+          cd tools/docs-parser && wasm-pack test --node -- --features wasm && cd $OLDPWD
           npm ci
           npm run export
           touch out/.nojekyll

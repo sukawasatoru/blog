@@ -221,4 +221,22 @@ timestamp
 
         assert_eq!(ret, None);
     }
+
+    #[wasm_bindgen_test]
+    fn parse_doc_missing_first_edition() {
+        let ret = parse_docs(
+            r#"
+Hello test
+==========
+
+this is body
+
+- - -
+
+timestamp  
+2021-03-01 (Last modify)"#,
+        );
+
+        assert_eq!(ret, None);
+    }
 }
