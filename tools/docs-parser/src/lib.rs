@@ -38,7 +38,7 @@ pub fn greet() {
 }
 
 #[wasm_bindgen]
-#[derive(serde::Serialize)]
+#[derive(Debug, Eq, PartialEq, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DocEntry {
     title: String,
@@ -75,7 +75,7 @@ pub fn parse_docs(doc: &str) -> Option<DocEntry> {
     let mut prev_line = vec![];
     let first_regex = regex::Regex::new(r#"^([-0-9]*) \(First edition\)"#).unwrap();
     let modify_regex = regex::Regex::new(r#"^([-0-9]*) \(Last modify\)"#).unwrap();
-    let title_sep_regex = regex::Regex::new(r#"^=*$"#).unwrap();
+    let title_sep_regex = regex::Regex::new(r#"^=+$"#).unwrap();
 
     for entry in doc.lines() {
         if title.is_none() {
@@ -152,4 +152,73 @@ pub fn parse_docs(doc: &str) -> Option<DocEntry> {
 pub fn set_panic_hook() {
     #[cfg(feature = "wasm")]
     console_error_panic_hook::set_once();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use wasm_bindgen_test::*;
+
+    #[wasm_bindgen_test]
+    fn parse_doc_normal() {
+        let ret = parse_docs(
+            r#"
+Hello test
+==========
+
+this is body
+
+- - -
+
+timestamp  
+2021-02-13 (First edition)"#,
+        );
+
+        let expect = Some(DocEntry {
+            title: "Hello test".into(),
+            first_edition: "2021-02-13".into(),
+            last_modify: None,
+        });
+        assert_eq!(ret, expect);
+    }
+
+    #[wasm_bindgen_test]
+    fn parse_doc_first_with_last() {
+        let ret = parse_docs(
+            r#"
+Hello test
+==========
+
+this is body
+
+- - -
+
+timestamp  
+2021-02-13 (First edition)  
+2021-03-01 (Last modify)"#,
+        );
+
+        let expect = Some(DocEntry {
+            title: "Hello test".into(),
+            first_edition: "2021-02-13".into(),
+            last_modify: Some("2021-03-01".into()),
+        });
+        assert_eq!(ret, expect);
+    }
+
+    #[wasm_bindgen_test]
+    fn parse_doc_missing_title() {
+        let ret = parse_docs(
+            r#"
+this is body
+
+- - -
+
+timestamp  
+2021-02-13 (First edition)  
+2021-03-01 (Last modify)"#,
+        );
+
+        assert_eq!(ret, None);
+    }
 }
