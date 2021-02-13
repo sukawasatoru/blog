@@ -53,7 +53,7 @@ const Index: NextPage<Props> = (props) => {
     <section className="main-content">
       <DefaultHeader/>
       <p>
-        Hello!
+        個人用のメモと流し読みする文章を書きます
       </p>
       {docLinks.map((value, i) =>
         <ul key={i}>
