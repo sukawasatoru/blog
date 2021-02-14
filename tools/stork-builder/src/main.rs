@@ -39,15 +39,19 @@ struct Opt {
     /// Override file
     #[structopt(short, long)]
     force: bool,
+
+    /// Print verbose log
+    #[structopt(short, long, parse(from_occurrences))]
+    verbose: u8,
 }
 
 #[tokio::main]
 async fn main() -> Fallible<()> {
-    tracing_subscriber::fmt::init();
+    let opt: Opt = Opt::from_args();
+
+    setup_log(opt.verbose);
 
     info!("Hello");
-
-    let opt: Opt = Opt::from_args();
 
     if !opt.force && opt.out.exists() {
         anyhow::bail!("The file already exists: {:?}", opt.out);
@@ -211,4 +215,23 @@ fn walk_dir(target_dir: &Path) -> BoxFuture<Fallible<Vec<PathBuf>>> {
         Ok(files)
     }
     .boxed()
+}
+
+fn setup_log(level: u8) {
+    let builder = tracing_subscriber::fmt();
+    match std::env::var(tracing_subscriber::EnvFilter::DEFAULT_ENV) {
+        Ok(data) => {
+            let builder = builder.with_env_filter(tracing_subscriber::EnvFilter::new(data));
+            match level {
+                0 => builder.init(),
+                1 => builder.with_max_level(tracing::Level::DEBUG).init(),
+                _ => builder.with_max_level(tracing::Level::TRACE).init(),
+            }
+        }
+        Err(_) => match level {
+            0 => builder.with_max_level(tracing::Level::INFO).init(),
+            1 => builder.with_max_level(tracing::Level::DEBUG).init(),
+            _ => builder.with_max_level(tracing::Level::TRACE).init(),
+        },
+    }
 }
