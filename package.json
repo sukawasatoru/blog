@@ -14,10 +14,8 @@
     "bundle-analyzer": "BUNDLE_ANALYZER=1 npm run build",
     "dev": "next dev",
     "docs-parser": "cd tools/docs-parser && wasm-pack build --release -- --no-default-features --features wasm",
-    "docs-parser-nodejs": "cd tools/docs-parser && wasm-pack build --release -d pkg-nodejs -t nodejs --  --no-default-features --features wasm",
-    "feed": "ts-node --project tools/feed/tsconfig.json tools/feed/feed.ts -b 'https://sukawasatoru.com' -o out/feed.xml src/docs",
     "export": "next build && next export",
-    "ln-s": "ln -s ../out/blog.st public/blog.st && ln -s ../out/feed.xml public/feed.xml",
+    "ln-s": "ln -s ../out/blog.st public/blog.st",
     "start": "next start",
     "test-docs-parser": "cd tools/docs-parser && wasm-pack test --node -- --no-default-features --features wasm"
   },
@@ -29,11 +27,9 @@
     "@types/node": "14.14.25",
     "@types/react": "17.0.1",
     "@types/react-dom": "17.0.0",
-    "@types/yargs": "16.0.0",
     "@typescript-eslint/eslint-plugin": "4.14.2",
     "@typescript-eslint/parser": "4.14.2",
     "docs-parser": "file:./tools/docs-parser/pkg",
-    "docs-parser-nodejs": "file:./tools/docs-parser/pkg-nodejs",
     "eslint": "7.19.0",
     "eslint-plugin-react-hooks": "4.2.0",
     "fork-ts-checker-webpack-plugin": "6.1.0",
@@ -43,10 +39,8 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-syntax-highlighter": "15.4.3",
-    "ts-node": "9.1.1",
     "typescript": "4.1.3",
     "webpack": "5.21.0",
-    "webpack-bundle-analyzer": "4.4.0",
-    "yargs": "16.2.0"
+    "webpack-bundle-analyzer": "4.4.0"
   }
 }
