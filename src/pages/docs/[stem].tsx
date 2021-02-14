@@ -34,6 +34,7 @@ const Docs: NextPage<Props> = props => {
   return <>
     <Head>
       <link rel="stylesheet" href="/cayman.css"/>
+      <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
       <title>
         {props.stem} - sukawasatoru.com
       </title>

@@ -226,3 +226,4 @@ dist
 !/.env.production
 !/.env.test
 /public/blog.st
+/public/feed.xml
