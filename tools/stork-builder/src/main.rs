@@ -103,6 +103,10 @@ async fn main() -> Fallible<()> {
             .to_str()
             .with_context(|| format!("to_str: {:?}", entry))?
         {
+            "feed" => {
+                debug!(?entry, "skip feed.html of root directory");
+                continue;
+            }
             "index" => {
                 debug!(?entry, "skip index.html of root directory");
                 continue;
