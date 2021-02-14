@@ -30,11 +30,11 @@ const Feed: FunctionComponent = () => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-    const baseUrl = `https://sukawasatoru.com`;
-    const entries = (await retrieveDocs())
-      .sort((a, b) => Temporal.PlainDate.compare(b.firstEdition, a.firstEdition));
+  const baseUrl = `https://sukawasatoru.com`;
+  const entries = (await retrieveDocs())
+    .sort((a, b) => Temporal.PlainDate.compare(b.firstEdition, a.firstEdition));
 
-    let buf = `<?xml version="1.0"?>
+  let buf = `<?xml version="1.0"?>
 <rss version="2.0">
   <channel>
     <title>sukawasatoru.com</title>
@@ -43,11 +43,11 @@ export const getStaticProps: GetStaticProps = async () => {
     <lastBuildDate>${new Date()}</lastBuildDate>
 `;
 
-    for (const entry of entries) {
-      const target = `${baseUrl}/docs/${entry.stem}`;
-      const mdxSource = await renderToString((await readFile(entry.filepath)).toString());
+  for (const entry of entries) {
+    const target = `${baseUrl}/docs/${entry.stem}`;
+    const mdxSource = await renderToString((await readFile(entry.filepath)).toString());
 
-      buf += `    <item>
+    buf += `    <item>
       <title>${entry.title}</title>
       <link>${target}</link>
       <guid>${target}</guid>
@@ -55,16 +55,15 @@ export const getStaticProps: GetStaticProps = async () => {
       <pubDate>${new Date(entry.firstEdition.toString())}</pubDate>
     </item>
 `;
-    }
+  }
 
-    buf += `  </channel>
+  buf += `  </channel>
 </rss>`;
 
-    await writeFile(`${process.cwd()}/public/feed.xml`, buf);
-    return {
-      props: {},
-    };
-  }
-;
+  await writeFile(`${process.cwd()}/public/feed.xml`, buf);
+  return {
+    props: {},
+  };
+};
 
 export default Feed;
