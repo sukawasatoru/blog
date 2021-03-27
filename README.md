@@ -1,6 +1,30 @@
 blog
 ====
 
+Development
+-----------
+
+```bash
+cd <path to repo>
+
+# build stor-builder.
+cd tools/stork-builder && cargo build --release && cd -
+
+# build docs-parser.
+npm run docs-parser
+
+# build stork index.
+npm install
+npm run export
+tools/stork-builder/target/release/stork-builder -fo out/blog.st -m src/docs out
+
+# symlink for "npm start".
+npm run ln-s
+
+# start Next.js
+npm run dev
+```
+
 LICENSE
 -------
 
