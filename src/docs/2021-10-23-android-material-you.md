@@ -73,7 +73,8 @@ private fun ColorItem(name: String, color: Color) {
 <a href="/2021-10-23-system-neutral1.png"><img alt="" src="/2021-10-23-system-neutral1.png" height="460" /></a>
 <a href="/2021-10-23-system-neutral2.png"><img alt="" src="/2021-10-23-system-neutral2.png" height="460" /></a>
 
-どうやら壁紙やユーザーによる可変な *system-accent* と固定な *system-neutral* があるようです。 *system-accent* は Dark theme を有効・無効と切り替えても変わりませんでした。
+どうやら壁紙やユーザーによる可変な *system-accent* と ~~固定な~~ *system-neutral* があるようです。 *system-accent* は Dark theme を有効・無効と切り替えても変わりませんでした。  
+**追記 (211023): system-neutral も可変でした**
 
 Google 製 App のスクリーンキャプチャーを撮って部品ごとにどの色が使われているのか確認してみました。
 
@@ -184,4 +185,5 @@ Tips:
 - - -
 
 timestamp  
-2021-10-23 (First edition)
+2021-10-23 (First edition)  
+2021-10-23 (Last modify)
