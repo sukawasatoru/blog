@@ -25,6 +25,8 @@ GitHub の gh-pages を Cloudflare Pages で Hosting する
 1. *Save and Deploy* をクリックする
 1. Deploy が完了したら *Custom domain* タブの *Set up a custom domain* をクリックする
 1. GitHub Pages に使用している Domain を入力し Continue をクリックする
+1. Settings タブから *Configure Preview deployments* をクリックする
+1. *None* にチェックを入れて *Save* をクリックする
 
 これで完了です。ここまで 5分もかかりませんでした。
 
