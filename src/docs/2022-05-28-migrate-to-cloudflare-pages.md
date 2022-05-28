@@ -39,4 +39,4 @@ GitHub Actions 相当のことができるようになったら考えるかな�
 - - -
 
 timestamp  
-2021-05-28 (First edition)
+2022-05-28 (First edition)
