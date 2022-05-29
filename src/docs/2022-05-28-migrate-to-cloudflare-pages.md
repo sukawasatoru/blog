@@ -52,7 +52,8 @@ GitHub Actions から wrangler で Deploy するには環境変数 *CLOUDFLARE_A
 
 *CLOUDFLARE_API_TOKEN* は Dashboard の適当なページを開くと表示されているのでその値を使用します。
 
-*CLOUDFLARE_API_TOKEN* と *CLOUDFLARE_ACCOUNT_ID* の準備ができたらあとは Deploy コマンドを実行するだけで `npx wrangler pages publish --project-name <your project name> .` を実行すると 1分弱で Deploy が完了します。
+*CLOUDFLARE_API_TOKEN* と *CLOUDFLARE_ACCOUNT_ID* の準備ができたらあとは Deploy コマンドを実行するだけで `npx wrangler pages publish --project-name <your project name> <target directory>` を実行すると 1分弱で Deploy が完了します。  
+注意点として `wrangler pages publish .` のようにカレントディレクトリを指定すると Deploy されたディレクトリ構造が壊れてしまうので `cd ..; wrangler pages publish dist` といった操作が必要でした。
 
 - - -
 
