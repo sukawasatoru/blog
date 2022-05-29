@@ -38,7 +38,24 @@ Cloudflare Pages でも Build が出来る
 Next.js だけで構築されていたなら Build も移行していいかな、と思いましたがこのサイトは Next.js のほか Rust の Build といったこともしているのでまあ移行しなくても良いか、といったモチベーションのため Build については移行していません。
 GitHub Actions 相当のことができるようになったら考えるかな、、、
 
+Wrangler を使って Deploy する
+-----------------------------
+
+GitHub Actions を使うのであれば Git 連携せずに [wrangler](https://developers.cloudflare.com/workers/wrangler/get-started/) で Deploy するのが良さそうでした。
+
+既に Git 連携している場合は Pages の *Settings* タブの *Builds & deployments* から *Production branch* と *Prebiew branches* の *Automatic deployments* を *Disable* にしておきます。
+
+GitHub Actions から wrangler で Deploy するには環境変数 *CLOUDFLARE_API_TOKEN* と *CLOUDFLARE_ACCOUNT_ID* が必要です。
+
+*CLOUDFLARE_API_TOKEN* は [API Tokens](https://dash.cloudflare.com/profile/api-tokens) から *Create Token* -> *Create Custom Token* で作成することができます。  
+設定項目はいくつかありますが *Permissions* で *Account* / *Cloudflare Pages* / *Edit* を設定し残りはデフォルトのままで *Continue to summary* -> *Create token* とすれば大丈夫です。
+
+*CLOUDFLARE_API_TOKEN* は Dashboard の適当なページを開くと表示されているのでその値を使用します。
+
+*CLOUDFLARE_API_TOKEN* と *CLOUDFLARE_ACCOUNT_ID* の準備ができたらあとは Deploy コマンドを実行するだけで `npx wrangler pages publish --project-name <your project name> .` を実行すると 1分弱で Deploy が完了します。
+
 - - -
 
 timestamp  
-2022-05-28 (First edition)
+2022-05-28 (First edition)  
+2022-05-29 (Last modify)
