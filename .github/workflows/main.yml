@@ -83,4 +83,4 @@ jobs:
       - name: Publish
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.LOUDFLARE_API_TOKEN }}
-        run: npx run wrangler pages publish --project-name blog .
+        run: npx wrangler pages publish --project-name blog .
