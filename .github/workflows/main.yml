@@ -77,11 +77,13 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: artifact
+          path: dist
       - uses: actions/download-artifact@v2
         with:
           name: stork-index
+          path: dist
       - name: Publish
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npx wrangler pages publish --project-name blog .
+        run: npx wrangler pages publish --project-name blog dist
