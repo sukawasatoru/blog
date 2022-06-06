@@ -13,7 +13,7 @@ wasm = ["console_error_panic_hook"]
 
 [dependencies]
 chrono = "=0.4.19"
-regex = "=1.4.3"
+regex = "=1.5.5"
 
 [dependencies.console_error_panic_hook]
 version = "=0.1.6"
