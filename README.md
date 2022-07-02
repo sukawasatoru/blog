@@ -7,6 +7,7 @@ Development
 ```bash
 cd <path to repo>
 
+# <use stork>
 # build stor-builder.
 cd tools/stork-builder && cargo build --release && cd -
 
@@ -20,6 +21,9 @@ tools/stork-builder/target/release/stork-builder -fo out/blog.st -m src/docs out
 
 # symlink for "npm start".
 npm run ln-s
+
+# enable stork configuration in configuration.ts
+# </use stork>
 
 # start Next.js
 npm run dev

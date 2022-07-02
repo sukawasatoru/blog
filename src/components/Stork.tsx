@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 sukawasatoru
+ * Copyright 2021, 2022 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {isStorkEnabled} from "@/model/configuration";
 import Head from "next/head";
 import {FunctionComponent, useEffect} from "react";
 
@@ -36,6 +37,10 @@ const storkName = 'blog';
 
 const Stork: FunctionComponent<unknown> = () => {
   useEffect(() => {
+    if (!isStorkEnabled) {
+      return;
+    }
+
     const waitStork = async () => {
       const timer = (millis: number) => new Promise(resolve => window.setTimeout(resolve, millis));
       while (!stork) {
