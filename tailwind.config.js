@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2022 sukawasatoru
+ * Copyright 2022 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-import Stork from "@/components/Stork";
-import Link from "next/link";
-import {FunctionComponent} from "react";
-
-const DefaultHeader: FunctionComponent = () =>
-  <>
-    <header className="pb-16">
-      <h1 className="text-xl text-neutral-600 font-medium tracking-wide mb-2 hover:underline">
-        <Link href="/">
-          <a>
-            sukawasatoru.com
-          </a>
-        </Link>
-      </h1>
-      <Stork/>
-    </header>
-  </>;
-
-export default DefaultHeader;
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx}",
+    "./src/components/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+  safelist: [
+    process.env.NODE_ENV === "development" ? { pattern: /.*/ } : {},
+  ]
+}

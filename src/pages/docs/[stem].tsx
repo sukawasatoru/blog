@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 sukawasatoru
+ * Copyright 2021, 2022 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@ import renderToString from "next-mdx-remote/render-to-string";
 import Head from "next/head";
 import Link from "next/link";
 import {ParsedUrlQuery} from "querystring";
-import {FunctionComponent, ReactElement} from "react";
+import {FC, ReactElement} from "react";
 import {Prism} from "react-syntax-highlighter";
+import {ghcolors} from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 type Props = {
   renderedMD: string;
@@ -33,30 +34,31 @@ type Props = {
 const Docs: NextPage<Props> = props => {
   return <>
     <Head>
-      <link rel="stylesheet" href="/cayman.css"/>
-      <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+      <link rel="alternate" type="application/rss+xml" href="/feed.xml"/>
       <title>
         {props.stem} - sukawasatoru.com
       </title>
     </Head>
-    <section className="main-content">
+    <style global jsx>{`
+      img, video {
+        // use img tag's attribute.
+        width: revert-layer;
+        height: revert-layer;
+      }
+    `}</style>
+    <section className="max-w-5xl mx-auto sm:px-6 py-8">
       <DefaultHeader/>
       <main>
         <div dangerouslySetInnerHTML={{__html: props.renderedMD}}/>
       </main>
-      <footer className="site-footer">
+      <footer>
         <Link href="/">
-          <a>
+          <a className="text-sky-600 hover:underline">
             Top
           </a>
         </Link>
       </footer>
     </section>
-    <style jsx>{`
-      .main-content {
-        font-size: 16px
-      }
-    `}</style>
   </>;
 };
 
@@ -79,18 +81,7 @@ export const getStaticPaths: GetStaticPaths<StaticPath> = async () => {
   };
 };
 
-const CodeBlock: FunctionComponent = (props) => {
-  const children = props.children as ReactElement;
-  if (children.props?.originalType === 'code' && children.props.className) {
-    return <Prism language={children.props.className.replace(/^language-/, '')}>
-      {children.props.children}
-    </Prism>;
-  } else {
-    return <pre>
-      {props.children}
-    </pre>;
-  }
-}
+export default Docs;
 
 export const getStaticProps: GetStaticProps<Props, StaticPath> = async context => {
   const stem = context.params!.stem;
@@ -99,7 +90,23 @@ export const getStaticProps: GetStaticProps<Props, StaticPath> = async context =
   const matterFile = (await readFile(filepath)).toString();
   const mdxSource = await renderToString(matterFile, {
     components: {
-      pre: CodeBlock,
+      a: (props: unknown) => <a {...props} className="text-sky-600 hover:underline"/>,
+      h1: (props: unknown) => <h1 {...props} className="text-3xl text-emerald-600 font-medium tracking-wider mb-8"/>,
+      h2: (props: unknown) => <h2 {...props} className="text-xl text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
+      h3: (props: unknown) => <h3 {...props} className="text-lg text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
+      inlineCode: (props: unknown) => <code {...props} className="px-1 py-0.5 bg-slate-100 rounded text-sm"/>,
+      ol: (props: unknown) => <ol {...props} className="list-decimal list-outside pl-8"/>,
+      ul: (props: unknown) => <ul {...props} className="list-disc list-outside pl-8"/>,
+      p: (props: any) => <p {...props} className="text-base my-4"/>,
+      pre: (props: any) => <Pre {...props} />,
+      table: (props: unknown) => <table {...props} className="table-auto border-collapse"/>,
+      th: (props: unknown) => <th {...props} className="border px-4 py-2"/>,
+      td: (props: unknown) => <td {...props} className="border px-4 py-2"/>,
+      // for debugging components.
+      // wrapper: (props: any) => {
+      //   console.log(`@ ${require("util").inspect(props, {depth: 20})}`);
+      //   return <div {...props} />;
+      // },
     },
   });
 
@@ -111,4 +118,16 @@ export const getStaticProps: GetStaticProps<Props, StaticPath> = async context =
   };
 };
 
-export default Docs;
+const Pre: FC<{ children: ReactElement }> = ({children, ...rest}) => {
+  const match = /language-(\w+)/.exec(children.props.className || '');
+  if (children.props.originalType === 'code') {
+    return <Prism
+      language={match?.[1]}
+      style={ghcolors}
+      children={children.props.children}
+      PreTag={({parentName, originalType, ...rest}) => <pre {...rest} className="sm:rounded-md bg-slate-200"/>}
+    />;
+  } else {
+    return <pre children={children} {...rest} />;
+  }
+};

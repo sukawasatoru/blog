@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 sukawasatoru
+ * Copyright 2021, 2022 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import {GetStaticProps, NextPage} from "next";
 import Head from "next/head";
 import Link from "next/link";
 import {Temporal} from "proposal-temporal";
-import {ReactElement} from "react";
+import {memo} from "react";
 
 type PropDocEntry = {
   stem: string;
@@ -32,40 +32,25 @@ type Props = {
   docEntries: PropDocEntry[];
 };
 
-const Index: NextPage<Props> = (props) => {
-  const docLinks: ReactElement[] = [];
-
-  for (const entry of props.docEntries) {
-    docLinks.push(<Link href={`/docs/${entry.stem}`}>
-      <a>
-        {`${entry.firstEdition}: ${entry.title}`}
-      </a>
-    </Link>);
-  }
-
+const Index: NextPage<Props> = ({docEntries}) => {
   return <>
     <Head>
-      <link rel="stylesheet" href="/cayman.css"/>
-      <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+      <link rel="alternate" type="application/rss+xml" href="/feed.xml"/>
       <title>
         sukawasatoru.com
       </title>
     </Head>
-    <section className="main-content">
+    <section className="max-w-5xl mx-auto sm:px-6 py-8">
       <DefaultHeader/>
       <p>
         個人用のメモと流し読みする文章を書きます
       </p>
-      {docLinks.map((value, i) =>
-        <ul key={i}>
-          <li>
-            {value}
-          </li>
-        </ul>
-      )}
+      <EntryList className="mt-4 sm:rounded-md overflow-hidden" docEntries={docEntries}/>
     </section>
   </>;
 };
+
+export default Index;
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const entries = await retrieveDocs();
@@ -84,4 +69,23 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   };
 };
 
-export default Index;
+interface EntryListProps {
+  className?: string;
+  docEntries: PropDocEntry[];
+}
+
+const EntryList = memo<EntryListProps>(function EntryList({className, docEntries}) {
+  return <div className={className}>
+    <ul role="list" className="divide-y divide-gray-200">
+      {docEntries.map((entry) =>
+        <li key={entry.title} className="hover:bg-gray-50">
+          <Link href={`/docs/${entry.stem}`}>
+            <a className="block py-3 text-sky-600">
+              {`${entry.firstEdition}: ${entry.title}`}
+            </a>
+          </Link>
+        </li>
+      )}
+    </ul>
+  </div>;
+});

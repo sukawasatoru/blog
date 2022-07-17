@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 sukawasatoru
+ * Copyright 2022 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-// https://github.com/react-syntax-highlighter/react-syntax-highlighter/blob/master/src/index.js
-declare module "react-syntax-highlighter" {
-  import {FunctionComponent} from "react";
-  export const LightAsync: any;
-  export const Light: FunctionComponent & any;
-  export const PrismAsyncLight: any;
-  export const PrismAsync: any;
-  export const PrismLight: FunctionComponent & any;
-  export const Prism: FunctionComponent & any;
-  export const createElement: any;
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  }
 }

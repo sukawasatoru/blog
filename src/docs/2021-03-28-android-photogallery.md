@@ -267,7 +267,7 @@ class DefaultImageRepository @Inject constructor(
 
 では App を起動しつつ Logcat を確認してみましょう。予想通りであれば 1000件取得するごとに *@@@@ succeeded* が出力されるので、それがしばらく表示されたのちに OOM します。
 
-<video controls playsinline width="832">
+<video controls playsInline width="832">
 	<source src="/2021-03-28-logcat.mp4" type="video/mp4"/>
 </video>
 
@@ -357,7 +357,7 @@ LoadParams.key に Paging に使用する情報、 GraphQL では [after (Cursor
 
 では、最低限 Paging library に必要な実装はできたので App を起動してひたすらスクロールしてみましょう。こちらも OOM するでしょうか。
 
-<video controls playsinline width="832">
+<video controls playsInline width="832">
 	<source src="/2021-03-28-logcat-paging.mp4" type="video/mp4"/>
 </video>
 
