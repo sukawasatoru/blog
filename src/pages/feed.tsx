@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 sukawasatoru
+ * Copyright 2021, 2022 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,22 @@
 import {retrieveDocs} from "@/function/docs";
 import {readFile, writeFile} from "fs/promises";
 import {GetStaticProps} from "next";
-import renderToString from "next-mdx-remote/render-to-string";
+import {MDXRemote} from "next-mdx-remote";
+import {serialize} from "next-mdx-remote/serialize";
 import Head from "next/head";
 import {Temporal} from "proposal-temporal";
-import {FunctionComponent} from "react";
+import {FC} from "react";
+import {renderToStaticMarkup} from "react-dom/server";
+import remarkGfm from "remark-gfm"
 
-const Feed: FunctionComponent = () => {
+const Feed: FC = () => {
   return <Head>
     <meta httpEquiv="refresh" content="0; url=/feed.xml"/>
     <title>redirect to feed.xml</title>
   </Head>;
 };
+
+export default Feed;
 
 export const getStaticProps: GetStaticProps = async () => {
   const baseUrl = `https://sukawasatoru.com`;
@@ -45,13 +50,21 @@ export const getStaticProps: GetStaticProps = async () => {
 
   for (const entry of entries) {
     const target = `${baseUrl}/docs/${entry.stem}`;
-    const mdxSource = await renderToString((await readFile(entry.filepath)).toString());
+    const mdxSource = await serialize((await readFile(entry.filepath)).toString(), {
+      mdxOptions: {
+        development: process.env.NODE_ENV === "development",
+        remarkPlugins: [
+          remarkGfm,
+        ],
+        format: entry.extension,
+      },
+    });
 
     buf += `    <item>
       <title>${entry.title}</title>
       <link>${target}</link>
       <guid>${target}</guid>
-      <description><![CDATA[${mdxSource.renderedOutput}]]></description>
+      <description><![CDATA[${renderToStaticMarkup(<MDXRemote {...mdxSource} />)}]]></description>
       <pubDate>${new Date(entry.firstEdition.toString())}</pubDate>
     </item>
 `;
@@ -65,5 +78,3 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {},
   };
 };
-
-export default Feed;

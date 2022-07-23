@@ -40,13 +40,13 @@ const Index: NextPage<Props> = ({docEntries}) => {
         sukawasatoru.com
       </title>
     </Head>
-    <section className="max-w-5xl mx-auto sm:px-6 py-8">
+    <div className="container mx-auto max-w-5xl sm:px-6 py-8">
       <DefaultHeader/>
       <p>
         個人用のメモと流し読みする文章を書きます
       </p>
       <EntryList className="mt-4 sm:rounded-md overflow-hidden" docEntries={docEntries}/>
-    </section>
+    </div>
   </>;
 };
 

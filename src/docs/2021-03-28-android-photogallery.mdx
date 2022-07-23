@@ -3,7 +3,7 @@ Android で 10万件の写真を表示する
 
 Google Photo のような App を作る場合どう設計をするか。
 
-iPhone の Photos もですが上下に非常に長いリストに Server から取得した Item が並ぶ UI を作るときにどう設計するか。 List はとりあえずで RecyclerView を使えば良さそうだし画像の表示に関しては Glide を使えば {memory ,disk }cache もいい感じにやってくれるので深く考えることはなさそうですね。気になる点は RecyclerView で使用する Adapter に持たせる Item の総数が非常に多くなった場合 OOM が発生しそうです。
+iPhone の Photos もですが上下に非常に長いリストに Server から取得した Item が並ぶ UI を作るときにどう設計するか。 List はとりあえずで RecyclerView を使えば良さそうだし画像の表示に関しては Glide を使えば \{memory ,disk}cache もいい感じにやってくれるので深く考えることはなさそうですね。気になる点は RecyclerView で使用する Adapter に持たせる Item の総数が非常に多くなった場合 OOM が発生しそうです。
 
 これを解決するためにはまず App 起動時の Adapter は空の List を持ち Item の総数だけ知っている状態にし、 RecyclerView の現在地周辺の Item を Load して離れている場所の Item を忘れて、、、といった実装が必要そうです。 List を動的に操作する実装は過去それなりにやってきたのですがあまりやりたくない実装ですね。
 
@@ -371,6 +371,7 @@ override fun pagingV3Stream(): Flow<PagingData<MyImage>> {
             maxSize = 5000,
     )) {
     // snip
+    }
 }
 ```
 
@@ -482,4 +483,5 @@ Paging library を使用することで巨大な Adapter を実現すること�
 - - -
 
 timestamp  
-2021-03-28 (First edition)
+2021-03-28 (First edition)  
+2022-07-23 (Last modify)

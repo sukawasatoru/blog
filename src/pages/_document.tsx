@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2022 sukawasatoru
+ * Copyright 2022 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-import Stork from "@/components/Stork";
-import Link from "next/link";
+import {DocumentProps, Head, Html, Main, NextScript} from "next/document";
 import {FC} from "react";
 
-const DefaultHeader: FC = () =>
-  <header className="pb-16">
-    <h1 className="text-xl text-neutral-600 font-medium tracking-wide mb-2 hover:underline">
-      <Link href="/">
-        <a>
-          sukawasatoru.com
-        </a>
-      </Link>
-    </h1>
-    <Stork/>
-  </header>;
+const Document: FC<DocumentProps> = () => {
+  return <>
+    <Html>
+      <Head>
+        {/* for Stork.tsx */}
+        <link rel="stylesheet" href="https://files.stork-search.net/releases/v1.5.0/basic.css"/>
+      </Head>
+      <body>
+      <Main/>
+      <NextScript/>
+      </body>
+    </Html>
+  </>;
+};
 
-export default DefaultHeader;
+export default Document;

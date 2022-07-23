@@ -56,13 +56,13 @@ const Stork: FunctionComponent<unknown> = () => {
 
   return <>
     <Head>
-      <link rel="stylesheet" href="https://files.stork-search.net/basic.css"/>
+      {/* moved to _document.tsx's <link rel="stylesheet" /> for fast reload. */}
     </Head>
     <div className="stork-wrapper">
       <input className="stork-input" data-stork={storkName} placeholder="Search..."/>
-      <div className="stork-output" data-stork={`${storkName}-output`} />
+      <div className="stork-output" data-stork={`${storkName}-output`}/>
     </div>
-    <script src="https://files.stork-search.net/stork.js" />
+    <script src="https://files.stork-search.net/releases/v1.5.0/stork.js"/>
   </>;
 };
 

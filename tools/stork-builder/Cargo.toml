@@ -2,24 +2,18 @@
 name = "stork-builder"
 version = "0.1.0"
 authors = ["Satoru Sukawa <sukawasatoru.github@outlook.jp>"]
-edition = "2018"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "=1.0.38"
-futures = "=0.3.12"
-structopt = "=0.3.21"
-tracing = "=0.1.23"
-tracing-subscriber = "=0.2.15"
-
-[dependencies.docs-parser]
-path = "../docs-parser"
-
-[dependencies.stork-search]
-version = "=1.0.4"
-default-features = false
-
-[dependencies.tokio]
-version = "=1.2.0"
-features = ["fs", "io-util", "macros", "rt-multi-thread"]
+anyhow = "=1.0.58"
+clap = { version = "3.2.14", features = ["derive"] }
+docs-parser = { path = "../docs-parser" }
+futures = "=0.3.21"
+serde = { version = "=1.0.140", features = ["derive"] }
+stork-lib = { version = "1.5.0", default-features = false, features = ["build-v3"] }
+tokio = { version = "=1.20.0", features = ["fs", "io-util", "macros", "rt-multi-thread"] }
+toml = "=0.5.9"
+tracing = "=0.1.35"
+tracing-subscriber = { version = "=0.3.15", features = ["env-filter"] }

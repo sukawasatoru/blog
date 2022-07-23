@@ -19,7 +19,7 @@ jobs:
           nvm use
           mkdir bin
           PATH="$PWD/bin:$PATH"
-          curl -L https://github.com/rustwasm/wasm-pack/releases/download/v0.9.1/wasm-pack-v0.9.1-x86_64-unknown-linux-musl.tar.gz | tar -zx --strip-components 1
+          curl -L https://github.com/rustwasm/wasm-pack/releases/download/v0.10.3/wasm-pack-v0.10.3-x86_64-unknown-linux-musl.tar.gz | tar -zx --strip-components 1
           mv wasm-pack bin
           npm run docs-parser
           npm run test-docs-parser

@@ -27,6 +27,9 @@ npm run ln-s
 
 # start Next.js
 npm run dev
+
+# unlink a symlink if used stork.
+unlink public/blog.st
 ```
 
 LICENSE

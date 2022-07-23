@@ -18,39 +18,42 @@ import DefaultHeader from "@/components/DefaultHeader";
 import {retrieveDocs} from "@/function/docs";
 import {readFile} from "fs/promises";
 import {GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage} from "next";
-import renderToString from "next-mdx-remote/render-to-string";
+import {MDXRemote} from "next-mdx-remote";
+import {serialize} from "next-mdx-remote/serialize";
 import Head from "next/head";
 import Link from "next/link";
 import {ParsedUrlQuery} from "querystring";
-import {FC, ReactElement} from "react";
+import {FC} from "react";
+import {renderToStaticMarkup} from "react-dom/server";
 import {Prism} from "react-syntax-highlighter";
 import {ghcolors} from "react-syntax-highlighter/dist/cjs/styles/prism";
+import remarkGfm from "remark-gfm"
 
 type Props = {
-  renderedMD: string;
+  rendered: string;
   stem: string;
 };
 
-const Docs: NextPage<Props> = props => {
+const Docs: NextPage<Props> = ({rendered, stem}) => {
   return <>
     <Head>
       <link rel="alternate" type="application/rss+xml" href="/feed.xml"/>
       <title>
-        {props.stem} - sukawasatoru.com
+        {stem} - sukawasatoru.com
       </title>
     </Head>
-    <style global jsx>{`
+    <style jsx global>{`
       img, video {
+        display: inline;
+
         // use img tag's attribute.
         width: revert-layer;
         height: revert-layer;
       }
     `}</style>
-    <section className="max-w-5xl mx-auto sm:px-6 py-8">
+    <div className="container mx-auto max-w-5xl sm:px-6 py-8">
       <DefaultHeader/>
-      <main>
-        <div dangerouslySetInnerHTML={{__html: props.renderedMD}}/>
-      </main>
+      <main dangerouslySetInnerHTML={{__html: rendered}}/>
       <footer>
         <Link href="/">
           <a className="text-sky-600 hover:underline">
@@ -58,7 +61,7 @@ const Docs: NextPage<Props> = props => {
           </a>
         </Link>
       </footer>
-    </section>
+    </div>
   </>;
 };
 
@@ -83,51 +86,50 @@ export const getStaticPaths: GetStaticPaths<StaticPath> = async () => {
 
 export default Docs;
 
-export const getStaticProps: GetStaticProps<Props, StaticPath> = async context => {
+export const getStaticProps: GetStaticProps<Props, StaticPath> = async (context) => {
   const stem = context.params!.stem;
   const docs = await retrieveDocs();
-  const filepath = docs.find(value => value.stem === stem)!.filepath;
-  const matterFile = (await readFile(filepath)).toString();
-  const mdxSource = await renderToString(matterFile, {
-    components: {
-      a: (props: unknown) => <a {...props} className="text-sky-600 hover:underline"/>,
-      h1: (props: unknown) => <h1 {...props} className="text-3xl text-emerald-600 font-medium tracking-wider mb-8"/>,
-      h2: (props: unknown) => <h2 {...props} className="text-xl text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
-      h3: (props: unknown) => <h3 {...props} className="text-lg text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
-      inlineCode: (props: unknown) => <code {...props} className="px-1 py-0.5 bg-slate-100 rounded text-sm"/>,
-      ol: (props: unknown) => <ol {...props} className="list-decimal list-outside pl-8"/>,
-      ul: (props: unknown) => <ul {...props} className="list-disc list-outside pl-8"/>,
-      p: (props: any) => <p {...props} className="text-base my-4"/>,
-      pre: (props: any) => <Pre {...props} />,
-      table: (props: unknown) => <table {...props} className="table-auto border-collapse"/>,
-      th: (props: unknown) => <th {...props} className="border px-4 py-2"/>,
-      td: (props: unknown) => <td {...props} className="border px-4 py-2"/>,
-      // for debugging components.
-      // wrapper: (props: any) => {
-      //   console.log(`@ ${require("util").inspect(props, {depth: 20})}`);
-      //   return <div {...props} />;
-      // },
+  const doc = docs.find(value => value.stem === stem)!;
+  const matterFile = (await readFile(doc.filepath)).toString();
+  const mdxSource = await serialize(matterFile, {
+    mdxOptions: {
+      development: process.env.NODE_ENV === "development",
+      remarkPlugins: [
+        remarkGfm,
+      ],
+      format: doc.extension,
     },
   });
 
+  const rendered = renderToStaticMarkup(<MDXRemote {...mdxSource} components={{
+    a: (props: any) => <a {...props} className="text-sky-600 hover:underline"/>,
+    h1: (props: any) => <h1 {...props} className="text-3xl text-emerald-600 font-medium tracking-wider mb-8"/>,
+    h2: (props: any) => <h2 {...props} className="text-xl text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
+    h3: (props: any) => <h3 {...props} className="text-lg text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
+    code: (props: any) => <code {...props} className="px-1 py-0.5 bg-slate-100 rounded text-sm"/>,
+    ol: (props: any) => <ol {...props} className="list-decimal list-outside pl-8"/>,
+    ul: (props: any) => <ul {...props} className="list-disc list-outside pl-8"/>,
+    p: (props: any) => <p {...props} className="text-base my-4"/>,
+    pre: (props: any) => <Pre {...props} />,
+    table: (props: any) => <table {...props} className="table-auto border-collapse"/>,
+    th: (props: any) => <th {...props} className="border px-4 py-2"/>,
+    td: (props: any) => <td {...props} className="border px-4 py-2"/>,
+  }}/>);
+
   return {
     props: {
-      renderedMD: mdxSource.renderedOutput,
+      rendered,
       stem,
     },
   };
 };
 
-const Pre: FC<{ children: ReactElement }> = ({children, ...rest}) => {
+const Pre: FC<{ children: { props: { className?: string; children: string } } }> = ({children}) => {
   const match = /language-(\w+)/.exec(children.props.className || '');
-  if (children.props.originalType === 'code') {
-    return <Prism
-      language={match?.[1]}
-      style={ghcolors}
-      children={children.props.children}
-      PreTag={({parentName, originalType, ...rest}) => <pre {...rest} className="sm:rounded-md bg-slate-200"/>}
-    />;
-  } else {
-    return <pre children={children} {...rest} />;
-  }
+  return <Prism
+    language={match?.[1]}
+    style={ghcolors}
+    children={children.props.children}
+    PreTag={(rest) => <pre {...rest} className='sm:rounded-md bg-slate-200'/>}
+  />;
 };

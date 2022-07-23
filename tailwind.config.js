@@ -17,14 +17,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/pages/**/*.{jsx,tsx}",
+    "./src/components/**/*.{jsx,tsx}",
   ],
   theme: {
     extend: {},
   },
   plugins: [],
   safelist: [
-    process.env.NODE_ENV === "development" ? { pattern: /.*/ } : {},
-  ]
-}
+    process.env.NODE_ENV === "development" && {pattern: /.*/},
+  ].filter(data => data),
+};

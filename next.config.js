@@ -16,27 +16,49 @@
 
 'use strict';
 
+const {access, symlink} = require("fs/promises");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 /** @type {import('next').NextConfig} */
 const config = {
   poweredByHeader: false,
   reactStrictMode: true,
-  // https://github.com/vercel/next.js/blob/5201cdb/packages/next/export/index.ts#L382
+  staticPageGenerationTimeout: 30,
   webpack: (config, options) => {
-    config.node.fs = 'empty';
+    config.experiments.syncWebAssembly = true;
 
     if (options.isServer) {
       config.plugins.push(
-        new ForkTsCheckerWebpackPlugin({
-          typescript: options.dev,
-          eslint: {
-            files: [
-              'src/**/*.ts',
-              'src/**/*.tsx',
-            ],
-          },
-        }),
+        new ForkTsCheckerWebpackPlugin(),
+      );
+
+      // https://github.com/vercel/next.js/issues/25852#issuecomment-1057059000
+      config.plugins.push(
+        new (class {
+          apply(compiler) {
+            compiler.hooks.afterEmit.tapPromise(
+              'SymlinkWebpackPlugin',
+              async (compiler) => {
+                const from = `${compiler.options.output.path}/../static`;
+                const to = `${compiler.options.output.path}/static`;
+
+                try {
+                  await access(from);
+                  console.log(`${from} already exists`);
+                } catch (error) {
+                  if (error.code === 'ENOENT') {
+                    // No link exists
+
+                    await symlink(to, from, 'junction');
+                    console.log(`created symlink ${from} -> ${to}`);
+                  } else {
+                    throw error;
+                  }
+                }
+              },
+            );
+          }
+        })(),
       );
 
       if (process.env.BUNDLE_ANALYZER) {

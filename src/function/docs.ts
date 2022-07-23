@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 sukawasatoru
+ * Copyright 2021, 2022 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import {Temporal} from "proposal-temporal";
 export type DocEntry = {
   filepath: PathLike;
   stem: string;
+  extension: 'md' | 'mdx';
   title: string;
   firstEdition: Temporal.PlainDate;
   lastModify?: Temporal.PlainDate;
@@ -35,7 +36,7 @@ export const retrieveDocs = async (): Promise<DocEntry[]> => {
   const ret: DocEntry[] = [];
 
   for (const filename of names) {
-    if (!filename.endsWith(".md")) {
+    if (!filename.endsWith(".md") && !filename.endsWith(".mdx")) {
       continue;
     }
 
@@ -52,7 +53,8 @@ export const retrieveDocs = async (): Promise<DocEntry[]> => {
 
     ret.push({
       filepath,
-      stem: filename.substring(0, filename.length - ".md".length),
+      stem: filename.substring(0, filename.lastIndexOf('.')),
+      extension: filename.substring(filename.lastIndexOf('.') + 1) as any,
       firstEdition: Temporal.PlainDate.from(docInfo.firstEdition),
       lastModify: docInfo.lastModify ? Temporal.PlainDate.from(docInfo.lastModify) : undefined,
       title: docInfo.title,
