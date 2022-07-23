@@ -104,7 +104,7 @@ export const getStaticProps: GetStaticProps<Props, StaticPath> = async (context)
   const rendered = renderToStaticMarkup(<MDXRemote {...mdxSource} components={{
     a: (props: any) => <a {...props} className="text-sky-600 hover:underline"/>,
     h1: (props: any) => <h1 {...props} className="text-3xl text-emerald-600 font-medium tracking-wider mb-8"/>,
-    h2: (props: any) => <h2 {...props} className="text-xl text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
+    h2: (props: any) => <h2 {...props} className="text-2xl text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
     h3: (props: any) => <h3 {...props} className="text-lg text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
     code: (props: any) => <code {...props} className="px-1 py-0.5 bg-slate-100 rounded text-sm"/>,
     ol: (props: any) => <ol {...props} className="list-decimal list-outside pl-8"/>,
