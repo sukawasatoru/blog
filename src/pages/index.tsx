@@ -45,7 +45,7 @@ const Index: NextPage<Props> = ({docEntries}) => {
       <p>
         個人用のメモと流し読みする文章を書きます
       </p>
-      <EntryList className="mt-4 sm:rounded-md overflow-hidden" docEntries={docEntries}/>
+      <EntryList className="mt-4 sm:rounded-md" docEntries={docEntries}/>
     </div>
   </>;
 };
@@ -78,7 +78,9 @@ const EntryList = memo<EntryListProps>(function EntryList({className, docEntries
   return <div className={className}>
     <ul role="list" className="divide-y divide-gray-200">
       {docEntries.map((entry) =>
-        <li key={entry.title} className="hover:bg-gray-50">
+        <li key={entry.title}
+            className="ease-in-out sm:hover:scale-[1.02] sm:hover:shadow motion-reduce:hover:transform-none duration-150 hover:bg-gray-50"
+        >
           <Link href={`/docs/${entry.stem}`}>
             <a className="block py-3 text-sky-600">
               {`${entry.firstEdition}: ${entry.title}`}
