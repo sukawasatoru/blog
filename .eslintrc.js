@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, 2021 sukawasatoru
+ * Copyright 2019, 2021, 2022 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,47 @@
 
 'use strict';
 
+/**
+ * @type {import("eslint").Linter.Config}
+ */
 module.exports = {
-    'root': true,
-    'parser': '@typescript-eslint/parser',
-    'parserOptions': {
-        'useJSXTextNode': true,
-        'project': './tsconfig.json',
-        'sourceType': 'module'
-    },
-    'plugins': [
-        '@typescript-eslint',
-        'react-hooks'
-    ],
-    'rules': {
-        '@typescript-eslint/adjacent-overload-signatures': 'warn',
-        '@typescript-eslint/member-delimiter-style': 'warn',
-        '@typescript-eslint/member-ordering': 'warn',
-        '@typescript-eslint/no-for-in-array': 'warn',
-        'react-hooks/rules-of-hooks': 'error',
-        'react-hooks/exhaustive-deps': 'warn',
-    },
+  extends: [
+    'eslint:recommended',
+    'next/core-web-vitals',
+  ],
+  root: true,
+  parserOptions: {
+    useJSXTextNode: true,
+    project: './tsconfig.json',
+  },
+  plugins: [
+    '@typescript-eslint',
+    'react-hooks',
+  ],
+  rules: {
+    '@typescript-eslint/adjacent-overload-signatures': 'warn',
+    '@typescript-eslint/member-delimiter-style': 'warn',
+    '@typescript-eslint/member-ordering': 'warn',
+    '@typescript-eslint/no-for-in-array': 'warn',
+    'import/first': 'error',
+    'import/order': ['error', {
+      alphabetize: {
+        order: 'asc',
+      },
+      warnOnUnassignedImports: true,
+    }],
+    'lines-between-class-members': 'error',
+    'no-multiple-empty-lines': ['error', {
+      max: 2,
+      maxEOF: 0,
+    }],
+    'no-trailing-spaces': 'error',
+    'no-unused-vars': 'off',
+    'quotes': ['error', 'single', {
+      allowTemplateLiterals: true,
+    }],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'semi': ['error', 'always'],
+  },
 };

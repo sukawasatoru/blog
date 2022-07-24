@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import DefaultHeader from "@/components/DefaultHeader";
-import {retrieveDocs} from "@/function/docs";
-import {readFile} from "fs/promises";
-import {GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage} from "next";
-import {MDXRemote} from "next-mdx-remote";
-import {serialize} from "next-mdx-remote/serialize";
-import Head from "next/head";
-import Link from "next/link";
-import {ParsedUrlQuery} from "querystring";
-import {FC} from "react";
-import {renderToStaticMarkup} from "react-dom/server";
-import {Prism} from "react-syntax-highlighter";
-import {ghcolors} from "react-syntax-highlighter/dist/cjs/styles/prism";
-import remarkGfm from "remark-gfm"
+import {readFile} from 'fs/promises';
+import {ParsedUrlQuery} from 'querystring';
+import {GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage} from 'next';
+import {MDXRemote} from 'next-mdx-remote';
+import {serialize} from 'next-mdx-remote/serialize';
+import Head from 'next/head';
+import Link from 'next/link';
+import {FC, ReactNode} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {Prism} from 'react-syntax-highlighter';
+import {ghcolors} from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import remarkGfm from 'remark-gfm';
+import DefaultHeader from '@/components/DefaultHeader';
+import {retrieveDocs} from '@/function/docs';
 
 type Props = {
   rendered: string;
@@ -72,7 +72,7 @@ interface StaticPath extends ParsedUrlQuery {
 
 export const getStaticPaths: GetStaticPaths<StaticPath> = async () => {
   const docs = await retrieveDocs();
-  const paths: GetStaticPathsResult<StaticPath>["paths"] = docs.map(value => ({
+  const paths: GetStaticPathsResult<StaticPath>['paths'] = docs.map(value => ({
     params: {
       stem: value.stem,
     }
@@ -93,7 +93,7 @@ export const getStaticProps: GetStaticProps<Props, StaticPath> = async (context)
   const matterFile = (await readFile(doc.filepath)).toString();
   const mdxSource = await serialize(matterFile, {
     mdxOptions: {
-      development: process.env.NODE_ENV === "development",
+      development: process.env.NODE_ENV === 'development',
       remarkPlugins: [
         remarkGfm,
       ],
@@ -102,18 +102,22 @@ export const getStaticProps: GetStaticProps<Props, StaticPath> = async (context)
   });
 
   const rendered = renderToStaticMarkup(<MDXRemote {...mdxSource} components={{
-    a: (props: any) => <a {...props} className="text-sky-600 hover:underline"/>,
-    h1: (props: any) => <h1 {...props} className="text-3xl text-emerald-600 font-medium tracking-wider mb-8"/>,
-    h2: (props: any) => <h2 {...props} className="text-2xl text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
-    h3: (props: any) => <h3 {...props} className="text-lg text-emerald-600 font-medium tracking-wide mt-6 mb-2"/>,
-    code: (props: any) => <code {...props} className="px-1 py-0.5 bg-slate-100 rounded text-sm"/>,
-    ol: (props: any) => <ol {...props} className="list-decimal list-outside pl-8"/>,
-    ul: (props: any) => <ul {...props} className="list-disc list-outside pl-8"/>,
-    p: (props: any) => <p {...props} className="text-base my-4"/>,
-    pre: (props: any) => <Pre {...props} />,
-    table: (props: any) => <table {...props} className="table-auto border-collapse"/>,
-    th: (props: any) => <th {...props} className="border px-4 py-2"/>,
-    td: (props: any) => <td {...props} className="border px-4 py-2"/>,
+    a: ({children, ...props}) => <a {...props} className="text-sky-600 hover:underline">{children}</a>,
+    h1: ({children, ...props}) => <h1 {...props}
+                                      className="text-3xl text-emerald-600 font-medium tracking-wider mb-8">{children}</h1>,
+    h2: ({children, ...props}) => <h2 {...props}
+                                      className="text-2xl text-emerald-600 font-medium tracking-wide mt-6 mb-2">{children}</h2>,
+    h3: ({children, ...props}) => <h3 {...props}
+                                      className="text-lg text-emerald-600 font-medium tracking-wide mt-6 mb-2">{children}</h3>,
+    code: ({children, ...props}) => <code {...props}
+                                          className="px-1 py-0.5 bg-slate-100 rounded text-sm">{children}</code>,
+    ol: ({children, ...props}) => <ol {...props} className="list-decimal list-outside pl-8">{children}</ol>,
+    ul: ({children, ...props}) => <ul {...props} className="list-disc list-outside pl-8">{children}</ul>,
+    p: ({children, ...props}) => <p {...props} className="text-base my-4">{children}</p>,
+    pre: ({children, ...props}) => <Pre {...props}>{children}</Pre>,
+    table: ({children, ...props}) => <table {...props} className="table-auto border-collapse">{children}</table>,
+    th: ({children, ...props}) => <th {...props} className="border px-4 py-2">{children}</th>,
+    td: ({children, ...props}) => <td {...props} className="border px-4 py-2">{children}</td>,
   }}/>);
 
   return {
@@ -124,12 +128,14 @@ export const getStaticProps: GetStaticProps<Props, StaticPath> = async (context)
   };
 };
 
-const Pre: FC<{ children: { props: { className?: string; children: string } } }> = ({children}) => {
-  const match = /language-(\w+)/.exec(children.props.className || '');
+const Pre: FC<{ children: ReactNode }> = ({children}) => {
+  const c = children as { props: { className?: string; children: string } };
+  const match = /language-(\w+)/.exec(c.props.className || '');
   return <Prism
     language={match?.[1]}
     style={ghcolors}
-    children={children.props.children}
     PreTag={(rest) => <pre {...rest} className='sm:rounded-md bg-slate-200'/>}
-  />;
+  >
+    {c.props.children}
+  </Prism>;
 };

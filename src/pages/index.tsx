@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import DefaultHeader from "@/components/DefaultHeader";
-import {retrieveDocs} from "@/function/docs";
-import {GetStaticProps, NextPage} from "next";
-import Head from "next/head";
-import Link from "next/link";
-import {Temporal} from "proposal-temporal";
-import {memo} from "react";
+import {GetStaticProps, NextPage} from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import {Temporal} from 'proposal-temporal';
+import {memo} from 'react';
+import DefaultHeader from '@/components/DefaultHeader';
+import {retrieveDocs} from '@/function/docs';
 
 type PropDocEntry = {
   stem: string;

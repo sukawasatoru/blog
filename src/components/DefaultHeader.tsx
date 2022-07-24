@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import Stork from "@/components/Stork";
-import Link from "next/link";
-import {FC} from "react";
+import Link from 'next/link';
+import {FC} from 'react';
+import Stork from '@/components/Stork';
 
 const DefaultHeader: FC = () =>
   <header className="pb-16">

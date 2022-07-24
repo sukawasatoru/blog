@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import "@/style/global.css"
-import {AppProps} from "next/app";
-import {FC} from "react";
+import {AppProps} from 'next/app';
+import {FC} from 'react';
+import '@/style/global.css';
 
 const MyApp: FC<AppProps> = ({Component, pageProps}) => {
   return <Component {...pageProps} />;

@@ -15,6 +15,8 @@
     "dev": "next dev",
     "docs-parser": "cd tools/docs-parser && wasm-pack build --release -- --no-default-features --features wasm",
     "export": "next build && next export",
+    "lint:fix": "next lint --fix",
+    "lint:list": "next lint",
     "ln-s": "ln -s ../out/blog.st public/blog.st",
     "start": "next start",
     "test-docs-parser": "cd tools/docs-parser && wasm-pack test --node -- --no-default-features --features wasm"
@@ -35,7 +37,7 @@
     "autoprefixer": "10.4.7",
     "docs-parser": "file:./tools/docs-parser/pkg",
     "eslint": "8.20.0",
-    "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-config-next": "12.2.3",
     "fork-ts-checker-webpack-plugin": "7.2.12",
     "next": "12.2.2",
     "next-mdx-remote": "4.0.3",

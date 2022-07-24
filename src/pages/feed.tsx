@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import {retrieveDocs} from "@/function/docs";
-import {readFile, writeFile} from "fs/promises";
-import {GetStaticProps} from "next";
-import {MDXRemote} from "next-mdx-remote";
-import {serialize} from "next-mdx-remote/serialize";
-import Head from "next/head";
-import {Temporal} from "proposal-temporal";
-import {FC} from "react";
-import {renderToStaticMarkup} from "react-dom/server";
-import remarkGfm from "remark-gfm"
+import {readFile, writeFile} from 'fs/promises';
+import {GetStaticProps} from 'next';
+import {MDXRemote} from 'next-mdx-remote';
+import {serialize} from 'next-mdx-remote/serialize';
+import Head from 'next/head';
+import {Temporal} from 'proposal-temporal';
+import {FC} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import remarkGfm from 'remark-gfm';
+import {retrieveDocs} from '@/function/docs';
 
 const Feed: FC = () => {
   return <Head>
@@ -52,7 +52,7 @@ export const getStaticProps: GetStaticProps = async () => {
     const target = `${baseUrl}/docs/${entry.stem}`;
     const mdxSource = await serialize((await readFile(entry.filepath)).toString(), {
       mdxOptions: {
-        development: process.env.NODE_ENV === "development",
+        development: process.env.NODE_ENV === 'development',
         remarkPlugins: [
           remarkGfm,
         ],

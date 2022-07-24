@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import {isStorkEnabled} from "@/model/configuration";
-import Head from "next/head";
-import {FunctionComponent, useEffect} from "react";
+import Head from 'next/head';
+import Script from 'next/script';
+import {FunctionComponent, useEffect} from 'react';
+import {isStorkEnabled} from '@/model/configuration';
 
 // https://stork-search.net/docs/js-ref/
 // https://github.com/jameslittle230/stork/tree/master/js
@@ -62,7 +63,7 @@ const Stork: FunctionComponent<unknown> = () => {
       <input className="stork-input" data-stork={storkName} placeholder="Search..."/>
       <div className="stork-output" data-stork={`${storkName}-output`}/>
     </div>
-    <script src="https://files.stork-search.net/releases/v1.5.0/stork.js"/>
+    <Script src="https://files.stork-search.net/releases/v1.5.0/stork.js"/>
   </>;
 };
 
