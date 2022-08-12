@@ -16,8 +16,8 @@
 
 'use strict';
 
-const {access, symlink} = require("fs/promises");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const {access, symlink} = require('fs/promises');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 /** @type {import('next').NextConfig} */
 const config = {

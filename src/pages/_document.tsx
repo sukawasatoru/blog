@@ -15,9 +15,11 @@
  */
 
 import {DocumentProps, Head, Html, Main, NextScript} from 'next/document';
+import Script from 'next/script';
 import {FC} from 'react';
 
 const Document: FC<DocumentProps> = () => {
+  // noinspection HtmlRequiredTitleElement
   return <>
     <Html>
       <Head>
@@ -27,6 +29,22 @@ const Document: FC<DocumentProps> = () => {
       <body>
       <Main/>
       <NextScript/>
+      <Script
+        id="add-prefs-color-scheme-class"
+        strategy="beforeInteractive"
+      >{`try {
+  if (
+    localStorage.theme === 'dark' ||
+    ((!('appearance' in localStorage) || localStorage.appearance === 'system') &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    )
+  ) {
+    document.documentElement.classList.add('dark')
+  }
+} catch (e) {
+  console.info('failed to update dark mode');
+  console.info(e);
+}`}</Script>
       </body>
     </Html>
   </>;

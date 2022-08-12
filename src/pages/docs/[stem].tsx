@@ -37,6 +37,7 @@ type Props = {
 const Docs: NextPage<Props> = ({rendered, stem}) => {
   return <>
     <Head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <link rel="alternate" type="application/rss+xml" href="/feed.xml"/>
       <title>
         {stem} - sukawasatoru.com
@@ -75,7 +76,7 @@ export const getStaticPaths: GetStaticPaths<StaticPath> = async () => {
   const paths: GetStaticPathsResult<StaticPath>['paths'] = docs.map(value => ({
     params: {
       stem: value.stem,
-    }
+    },
   }));
 
   return {
@@ -103,14 +104,14 @@ export const getStaticProps: GetStaticProps<Props, StaticPath> = async (context)
 
   const rendered = renderToStaticMarkup(<MDXRemote {...mdxSource} components={{
     a: ({children, ...props}) => <a {...props} className="text-sky-600 hover:underline">{children}</a>,
-    h1: ({children, ...props}) => <h1 {...props}
-                                      className="text-3xl text-emerald-600 font-medium tracking-wider mb-8">{children}</h1>,
-    h2: ({children, ...props}) => <h2 {...props}
-                                      className="text-2xl text-emerald-600 font-medium tracking-wide mt-6 mb-2">{children}</h2>,
-    h3: ({children, ...props}) => <h3 {...props}
-                                      className="text-lg text-emerald-600 font-medium tracking-wide mt-6 mb-2">{children}</h3>,
-    code: ({children, ...props}) => <code {...props}
-                                          className="px-1 py-0.5 bg-slate-100 rounded text-sm">{children}</code>,
+    h1: ({children, ...props}) =>
+      <h1 {...props} className="text-3xl text-emerald-600 font-medium tracking-wider mb-8">{children}</h1>,
+    h2: ({children, ...props}) =>
+      <h2 {...props} className="text-2xl text-emerald-600 font-medium tracking-wide mt-6 mb-2">{children}</h2>,
+    h3: ({children, ...props}) =>
+      <h3 {...props} className="text-lg text-emerald-600 font-medium tracking-wide mt-6 mb-2">{children}</h3>,
+    code: ({children, ...props}) =>
+      <code {...props} className="px-1 py-0.5 bg-slate-100 dark:bg-slate-700 rounded text-sm">{children}</code>,
     ol: ({children, ...props}) => <ol {...props} className="list-decimal list-outside pl-8">{children}</ol>,
     ul: ({children, ...props}) => <ul {...props} className="list-disc list-outside pl-8">{children}</ul>,
     p: ({children, ...props}) => <p {...props} className="text-base my-4">{children}</p>,

@@ -14,14 +14,4 @@
  * limitations under the License.
  */
 
-@tailwind base;
-@tailwind components;
-
-@layer base {
-  .dark {
-    @apply text-slate-300;
-    @apply bg-neutral-900;
-  }
-}
-
-@tailwind utilities;
+export type Appearance = 'system' | 'light' | 'dark';

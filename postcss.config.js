@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+'use strict';
+
 module.exports = {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
   }
-}
+};

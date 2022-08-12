@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
+'use strict';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/pages/**/*.{jsx,tsx}",
-    "./src/components/**/*.{jsx,tsx}",
+    './src/pages/**/*.{jsx,tsx}',
+    './src/components/**/*.{jsx,tsx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {},
   },
   plugins: [],
   safelist: [
-    process.env.NODE_ENV === "development" && {pattern: /.*/},
+    process.env.NODE_ENV === 'development' && {pattern: /.*/},
   ].filter(data => data),
 };

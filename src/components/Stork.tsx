@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import clsx from 'clsx';
 import Head from 'next/head';
 import Script from 'next/script';
-import {FunctionComponent} from 'react';
+import {ComponentProps, FC} from 'react';
 import {isStorkEnabled} from '@/model/configuration';
 
 /**
@@ -78,12 +79,16 @@ declare const stork: {
 
 const storkName = 'blog';
 
-const Stork: FunctionComponent<unknown> = () => {
+export interface Props extends Omit<ComponentProps<'div'>, 'children'> {
+  // nothing.
+}
+
+const Stork: FC<Props> = ({className, ...rest}) => {
   return <>
     <Head>
       {/* moved to _document.tsx's <link rel="stylesheet" /> for fast reload. */}
     </Head>
-    <div className="stork-wrapper">
+    <div {...rest} className={clsx(className, 'stork-wrapper')}>
       <input className="stork-input" data-stork={storkName} placeholder="Search..."/>
       <div className="stork-output" data-stork={`${storkName}-output`}/>
     </div>

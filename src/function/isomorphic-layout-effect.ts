@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-@tailwind base;
-@tailwind components;
+import {useEffect, useLayoutEffect} from 'react';
 
-@layer base {
-  .dark {
-    @apply text-slate-300;
-    @apply bg-neutral-900;
-  }
-}
-
-@tailwind utilities;
+export const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;

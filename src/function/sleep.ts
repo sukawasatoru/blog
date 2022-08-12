@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-@tailwind base;
-@tailwind components;
-
-@layer base {
-  .dark {
-    @apply text-slate-300;
-    @apply bg-neutral-900;
-  }
-}
-
-@tailwind utilities;
+export const sleep = (delay?: number): Promise<void> =>
+  typeof window === 'undefined' ?
+    new Promise((resolve) => setTimeout(resolve, delay)) :
+    new Promise((resolve) => window.setTimeout(resolve, delay));

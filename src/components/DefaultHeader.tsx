@@ -16,18 +16,20 @@
 
 import Link from 'next/link';
 import {FC} from 'react';
+import {AppearanceSelector} from '@/components/AppearanceSelector';
 import Stork from '@/components/Stork';
 
 const DefaultHeader: FC = () =>
-  <header className="pb-16">
-    <h1 className="text-xl text-neutral-600 font-medium tracking-wide mb-2 hover:underline">
+  <header className="mb-16 flex flex-row justify-between items-baseline">
+    <h1 className='text-xl text-neutral-600 font-medium tracking-wide mb-2 hover:underline dark:text-white'>
       <Link href="/">
         <a>
           sukawasatoru.com
         </a>
       </Link>
     </h1>
-    <Stork/>
+    <Stork className='grow mx-8 hidden sm:block'/>
+    <AppearanceSelector className="my-auto" />
   </header>;
 
 export default DefaultHeader;
