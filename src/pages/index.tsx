@@ -80,7 +80,7 @@ const EntryList = memo<EntryListProps>(function EntryList({className, docEntries
     <ul role="list" className="divide-y divide-gray-200">
       {docEntries.map((entry) =>
         <li key={entry.title}
-            className="ease-in-out sm:hover:scale-[1.02] sm:hover:shadow motion-reduce:hover:transform-none duration-150 hover:bg-gray-50"
+            className="ease-in-out sm:hover:scale-[1.02] sm:hover:shadow motion-reduce:hover:transform-none duration-150 hover:bg-gray-50 dark:hover:bg-neutral-700"
         >
           <Link href={`/docs/${entry.stem}`}>
             <a className="block py-3 text-sky-600">
