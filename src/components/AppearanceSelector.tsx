@@ -36,9 +36,10 @@ const updateClassList = (isDark: boolean) => {
   } else {
     document.documentElement.classList.remove('dark');
   }
-  document.documentElement.classList.add('[&_*]:!transition-none');
 
-  sleep().then(() => document.documentElement.classList.remove('[&_*]:!transition-none'));
+  // need to use transitions to clear div element if use transition in AppearanceSelector.
+  // document.documentElement.classList.add('[&_*]:!transition-none');
+  // sleep().then(() => document.documentElement.classList.remove('[&_*]:!transition-none'));
 };
 
 /**
