@@ -16,6 +16,7 @@
 
 import {readFile} from 'fs/promises';
 import {ParsedUrlQuery} from 'querystring';
+import clsx from 'clsx';
 import {GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage} from 'next';
 import {MDXRemote} from 'next-mdx-remote';
 import {serialize} from 'next-mdx-remote/serialize';
@@ -24,7 +25,6 @@ import Link from 'next/link';
 import {FC, ReactNode} from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {Prism} from 'react-syntax-highlighter';
-import {ghcolors} from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from 'remark-gfm';
 import DefaultHeader from '@/components/DefaultHeader';
 import {retrieveDocs} from '@/function/docs';
@@ -134,8 +134,8 @@ const Pre: FC<{ children: ReactNode }> = ({children}) => {
   const match = /language-(\w+)/.exec(c.props.className || '');
   return <Prism
     language={match?.[1]}
-    style={ghcolors}
-    PreTag={(rest) => <pre {...rest} className='sm:rounded-md bg-slate-200'/>}
+    style={{}}
+    PreTag={(rest) => <pre {...rest} className={clsx(c.props.className, 'sm:rounded-md bg-slate-200')} style={{backgroundColor: ''}}/>}
   >
     {c.props.children}
   </Prism>;

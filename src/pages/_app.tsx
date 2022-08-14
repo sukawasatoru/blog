@@ -17,6 +17,7 @@
 import {AppProps} from 'next/app';
 import {FC} from 'react';
 import '@/style/global.css';
+import '@/style/prism.css';
 
 const MyApp: FC<AppProps> = ({Component, pageProps}) => {
   return <Component {...pageProps} />;
