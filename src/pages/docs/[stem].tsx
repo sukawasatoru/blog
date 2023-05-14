@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2022 sukawasatoru
+ * Copyright 2021, 2022, 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ import {readFile} from 'fs/promises';
 import {ParsedUrlQuery} from 'querystring';
 import clsx from 'clsx';
 import {GetStaticPaths, GetStaticPathsResult, GetStaticProps, NextPage} from 'next';
-import {MDXRemote} from 'next-mdx-remote';
-import {serialize} from 'next-mdx-remote/serialize';
 import Head from 'next/head';
 import Link from 'next/link';
+import {MDXRemote} from 'next-mdx-remote';
+import {serialize} from 'next-mdx-remote/serialize';
 import {FC, ReactNode} from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {Prism} from 'react-syntax-highlighter';
@@ -56,10 +56,8 @@ const Docs: NextPage<Props> = ({rendered, stem}) => {
       <DefaultHeader/>
       <main dangerouslySetInnerHTML={{__html: rendered}}/>
       <footer>
-        <Link href="/">
-          <a className="text-sky-600 hover:underline">
-            Top
-          </a>
+        <Link className="text-sky-600 hover:underline" href="/">
+          Top
         </Link>
       </footer>
     </div>
@@ -88,8 +86,10 @@ export const getStaticPaths: GetStaticPaths<StaticPath> = async () => {
 export default Docs;
 
 export const getStaticProps: GetStaticProps<Props, StaticPath> = async (context) => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const stem = context.params!.stem;
   const docs = await retrieveDocs();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const doc = docs.find(value => value.stem === stem)!;
   const matterFile = (await readFile(doc.filepath)).toString();
   const mdxSource = await serialize(matterFile, {

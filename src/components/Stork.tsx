@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2022 sukawasatoru
+ * Copyright 2021, 2022, 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,6 +79,7 @@ declare const stork: {
 
 const storkName = 'blog';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Props extends Omit<ComponentProps<'div'>, 'children'> {
   // nothing.
 }
@@ -95,11 +96,11 @@ const Stork: FC<Props> = ({className, ...rest}) => {
     <Script
       src="https://files.stork-search.net/releases/v1.5.0/stork.js"
       strategy="lazyOnload"
-      onLoad={async () => {
+      onLoad={() => {
         if (!isStorkEnabled) {
           return;
         }
-        await stork.register(storkName, '/blog.st', {minimumQueryLength: 2});
+        void (async () => stork.register(storkName, '/blog.st', {minimumQueryLength: 2}))();
       }}
     />
   </>;

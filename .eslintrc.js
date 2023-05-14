@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, 2021, 2022 sukawasatoru
+ * Copyright 2019, 2021, 2022, 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,23 +21,33 @@
  */
 module.exports = {
   extends: [
-    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'next/core-web-vitals',
   ],
   root: true,
   parserOptions: {
-    useJSXTextNode: true,
     project: './tsconfig.json',
   },
-  plugins: [
-    '@typescript-eslint',
-    'react-hooks',
-  ],
   rules: {
-    '@typescript-eslint/adjacent-overload-signatures': 'warn',
+    'react-hooks/exhaustive-deps': [
+      'warn', {
+        // for recoil https://recoiljs.org/docs/introduction/installation#eslint
+        'additionalHooks': '(useRecoilCallback|useRecoilTransaction_UNSTABLE)'
+      },
+    ],
     '@typescript-eslint/member-delimiter-style': 'warn',
     '@typescript-eslint/member-ordering': 'warn',
-    '@typescript-eslint/no-for-in-array': 'warn',
+    '@typescript-eslint/no-base-to-string': 'error',
+    '@typescript-eslint/no-confusing-non-null-assertion': 'error',
+    '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'error',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/prefer-includes': 'error',
+    '@typescript-eslint/restrict-template-expressions': 'off',
+    '@typescript-eslint/triple-slash-reference': 'warn',
+    '@typescript-eslint/unified-signatures': 'error',
+    '@typescript-eslint/adjacent-overload-signatures': 'warn',
     'import/first': 'error',
     'import/order': ['error', {
       alphabetize: {
@@ -51,12 +61,9 @@ module.exports = {
       maxEOF: 0,
     }],
     'no-trailing-spaces': 'error',
-    'no-unused-vars': 'off',
     'quotes': ['error', 'single', {
       allowTemplateLiterals: true,
     }],
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
     'semi': ['error', 'always'],
   },
 };

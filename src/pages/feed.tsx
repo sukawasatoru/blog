@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2022 sukawasatoru
+ * Copyright 2021, 2022, 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 import {readFile, writeFile} from 'fs/promises';
 import {GetStaticProps} from 'next';
+import Head from 'next/head';
 import {MDXRemote} from 'next-mdx-remote';
 import {serialize} from 'next-mdx-remote/serialize';
-import Head from 'next/head';
 import {Temporal} from 'proposal-temporal';
 import {FC} from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';

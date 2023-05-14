@@ -8,7 +8,7 @@ Development
 cd <path to repo>
 
 # <use stork>
-# build stor-builder.
+# build stork-builder.
 cd tools/stork-builder && cargo build --release && cd -
 
 # build docs-parser.
@@ -36,7 +36,7 @@ LICENSE
 -------
 
 ```
-   Copyright 2017, 2018, 2021, 2022 sukawasatoru
+   Copyright 2017, 2018, 2021, 2022, 2023 sukawasatoru
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 sukawasatoru
+ * Copyright 2020, 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ export class Deserializer<T> {
       return undefined;
     }
     try {
-      return JSON.parse(value);
+      return JSON.parse(value) as object;
     } catch (e) {
       console.warn(`failed to parse value: ${e}`);
       return undefined;

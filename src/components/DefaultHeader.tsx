@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2022 sukawasatoru
+ * Copyright 2021, 2022, 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,7 @@ const DefaultHeader: FC = () =>
   <header className="mb-16 flex flex-row justify-between items-baseline">
     <h1 className='text-xl text-neutral-600 font-medium tracking-wide mb-2 hover:underline dark:text-white'>
       <Link href="/">
-        <a>
-          sukawasatoru.com
-        </a>
+        sukawasatoru.com
       </Link>
     </h1>
     <Stork className='grow mx-8 hidden sm:block'/>

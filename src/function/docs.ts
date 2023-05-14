@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2022 sukawasatoru
+ * Copyright 2021, 2022, 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {PathLike} from "fs";
-import {readdir, readFile, stat} from "fs/promises";
-import {Temporal} from "proposal-temporal";
+import {PathLike} from 'fs';
+import {readdir, readFile, stat} from 'fs/promises';
+import {Temporal} from 'proposal-temporal';
 
 export type DocEntry = {
   filepath: PathLike;
@@ -28,7 +28,7 @@ export type DocEntry = {
 };
 
 export const retrieveDocs = async (): Promise<DocEntry[]> => {
-  const {parseDocs} = await import("docs-parser");
+  const {parseDocs} = await import('docs-parser');
 
   const docsPath = `${process.cwd()}/src/docs`;
   const names = await readdir(docsPath);
@@ -36,7 +36,7 @@ export const retrieveDocs = async (): Promise<DocEntry[]> => {
   const ret: DocEntry[] = [];
 
   for (const filename of names) {
-    if (!filename.endsWith(".md") && !filename.endsWith(".mdx")) {
+    if (!filename.endsWith('.md') && !filename.endsWith('.mdx')) {
       continue;
     }
 
@@ -54,7 +54,7 @@ export const retrieveDocs = async (): Promise<DocEntry[]> => {
     ret.push({
       filepath,
       stem: filename.substring(0, filename.lastIndexOf('.')),
-      extension: filename.substring(filename.lastIndexOf('.') + 1) as any,
+      extension: filename.substring(filename.lastIndexOf('.') + 1) as 'md' | 'mdx',
       firstEdition: Temporal.PlainDate.from(docInfo.firstEdition),
       lastModify: docInfo.lastModify ? Temporal.PlainDate.from(docInfo.lastModify) : undefined,
       title: docInfo.title,

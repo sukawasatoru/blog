@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, 2022 sukawasatoru
+ * Copyright 2021, 2022, 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,10 +82,8 @@ const EntryList = memo<EntryListProps>(function EntryList({className, docEntries
         <li key={entry.title}
             className="ease-in-out sm:hover:scale-[1.02] sm:hover:shadow motion-reduce:hover:transform-none duration-150 hover:bg-gray-50 dark:hover:bg-neutral-700"
         >
-          <Link href={`/docs/${entry.stem}`}>
-            <a className="block py-3 text-sky-600">
-              {`${entry.firstEdition}: ${entry.title}`}
-            </a>
+          <Link className="block py-3 text-sky-600" href={`/docs/${entry.stem}`}>
+            {`${entry.firstEdition}: ${entry.title}`}
           </Link>
         </li>
       )}
