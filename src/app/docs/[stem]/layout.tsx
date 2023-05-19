@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 sukawasatoru
+ * Copyright 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-import {AppProps} from 'next/app';
-import {FC} from 'react';
-import '@/style/global.css';
-import '@/style/prism.css';
+import {JSX, ReactNode} from 'react';
+import '@/app/docs/[stem]/docs.css';
 
-const MyApp: FC<AppProps> = ({Component, pageProps}) => {
-  return <Component {...pageProps} />;
-};
-
-export default MyApp;
+export default function DocsLayout({children}: { children: ReactNode }): JSX.Element {
+  return <>
+    {children}
+  </>;
+}

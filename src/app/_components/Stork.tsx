@@ -87,7 +87,7 @@ export interface Props extends Omit<ComponentProps<'div'>, 'children'> {
 const Stork: FC<Props> = ({className, ...rest}) => {
   return <>
     <Head>
-      {/* moved to _document.tsx's <link rel="stylesheet" /> for fast reload. */}
+      {/* moved to layout.tsx's <link rel="stylesheet" /> for fast reload. */}
     </Head>
     <div {...rest} className={clsx(className, 'stork-wrapper')}>
       <input className="stork-input" data-stork={storkName} placeholder="Search..."/>

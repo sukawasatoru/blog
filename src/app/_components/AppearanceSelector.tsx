@@ -70,7 +70,7 @@ const useAppearance = (): [Appearance | undefined, (value: Appearance) => void, 
 
       initial.current = false;
 
-      // use appearance that set via _document.tsx.
+      // use appearance that set via layout.tsx.
     } else {
       appearance && prefsRepo.saveAppearance(appearance);
       switch (appearance) {

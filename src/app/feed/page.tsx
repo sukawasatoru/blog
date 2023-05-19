@@ -15,26 +15,29 @@
  */
 
 import {readFile, writeFile} from 'fs/promises';
-import {GetStaticProps} from 'next';
-import Head from 'next/head';
-import {MDXRemote} from 'next-mdx-remote';
-import {serialize} from 'next-mdx-remote/serialize';
+import {Metadata} from 'next';
+import {compileMDX} from 'next-mdx-remote/rsc';
 import {Temporal} from 'proposal-temporal';
-import {FC} from 'react';
-import {renderToStaticMarkup} from 'react-dom/server';
+import {JSX} from 'react';
 import remarkGfm from 'remark-gfm';
 import {retrieveDocs} from '@/function/docs';
 
-const Feed: FC = () => {
-  return <Head>
-    <meta httpEquiv="refresh" content="0; url=/feed.xml"/>
-    <title>redirect to feed.xml</title>
-  </Head>;
+export const metadata: Metadata = {
+  title: 'redirect to feed.xml',
 };
 
-export default Feed;
+export default async function Feed(): Promise<JSX.Element> {
+  await generateFeed();
 
-export const getStaticProps: GetStaticProps = async () => {
+  // https://nextjs.org/docs/app/api-reference/functions/generate-metadata#unsupported-metadata
+  return (
+    <head>
+      <meta httpEquiv="refresh" content="0; url=/feed.xml"/>
+    </head>
+  );
+}
+
+async function generateFeed(): Promise<void> {
   const baseUrl = `https://sukawasatoru.com`;
   const entries = (await retrieveDocs())
     .sort((a, b) => Temporal.PlainDate.compare(b.firstEdition, a.firstEdition));
@@ -50,21 +53,27 @@ export const getStaticProps: GetStaticProps = async () => {
 
   for (const entry of entries) {
     const target = `${baseUrl}/docs/${entry.stem}`;
-    const mdxSource = await serialize((await readFile(entry.filepath)).toString(), {
-      mdxOptions: {
-        development: process.env.NODE_ENV === 'development',
-        remarkPlugins: [
-          remarkGfm,
-        ],
-        format: entry.extension,
+    const {content} = await compileMDX({
+      source: (await readFile(entry.filepath)).toString(),
+      options: {
+        mdxOptions: {
+          development: process.env.NODE_ENV === 'development',
+          remarkPlugins: [
+            remarkGfm,
+          ],
+          format: entry.extension,
+        }
       },
     });
+
+    // https://github.com/vercel/next.js/issues/43810#issuecomment-1341136525
+    const {renderToStaticMarkup} = await import('react-dom/server');
 
     buf += `    <item>
       <title>${entry.title}</title>
       <link>${target}</link>
       <guid>${target}</guid>
-      <description><![CDATA[${renderToStaticMarkup(<MDXRemote {...mdxSource} />)}]]></description>
+      <description><![CDATA[${renderToStaticMarkup(content)}]]></description>
       <pubDate>${new Date(entry.firstEdition.toString())}</pubDate>
     </item>
 `;
@@ -74,7 +83,4 @@ export const getStaticProps: GetStaticProps = async () => {
 </rss>`;
 
   await writeFile(`${process.cwd()}/public/feed.xml`, buf);
-  return {
-    props: {},
-  };
-};
+}

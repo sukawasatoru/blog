@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+'use client';
+
 import Link from 'next/link';
 import {FC} from 'react';
-import {AppearanceSelector} from '@/components/AppearanceSelector';
-import Stork from '@/components/Stork';
+import {AppearanceSelector} from '@/app/_components/AppearanceSelector';
+import Stork from '@/app/_components/Stork';
 
 const DefaultHeader: FC = () =>
   <header className="mb-16 flex flex-row justify-between items-baseline">
