@@ -18,11 +18,7 @@ import {Listbox, Transition} from '@headlessui/react';
 import {ComputerDesktopIcon, MoonIcon, SunIcon} from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import {
-  ComponentProps,
-  FC,
-  Fragment,
-  PropsWithChildren,
-  PropsWithoutRef,
+  Fragment, JSX,
   useEffect,
   useMemo,
   useRef,
@@ -108,9 +104,7 @@ const iconMap = {
   system: ComputerDesktopIcon,
 };
 
-export type Props = PropsWithChildren<PropsWithoutRef<ComponentProps<'div'>>>
-
-export const AppearanceSelector: FC<Props> = (props) => {
+export default function AppearanceSelector(): JSX.Element {
   const [appearance, setAppearance, isSystemDark] = useAppearance();
 
   const ButtonIcon = useMemo(() => {
@@ -129,7 +123,7 @@ export const AppearanceSelector: FC<Props> = (props) => {
     return appearance && funcs[appearance]() || undefined;
   }, [appearance, isSystemDark]);
 
-  return <Listbox as="div" {...props} value={appearance} onChange={setAppearance}>
+  return <Listbox as="div" value={appearance} onChange={setAppearance}>
     <Listbox.Label className="sr-only">
       Theme
     </Listbox.Label>
@@ -190,4 +184,4 @@ export const AppearanceSelector: FC<Props> = (props) => {
       </Transition>
     </div>
   </Listbox>;
-};
+}

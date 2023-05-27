@@ -14,4 +14,34 @@
  * limitations under the License.
  */
 
-export const isStorkEnabled =  process.env.NODE_ENV !== 'development';
+export function meilisearchBaseUrl(): string {
+  const baseUrl = process.env.BLOG_MEILISEARCH_BASE_URL;
+  if (!baseUrl) {
+    throw new Error(`need to set 'BLOG_MEILISEARCH_BASE_URL'`);
+  }
+  return baseUrl;
+}
+
+export function meilisearchCIAPIKey(): string {
+  const key = process.env.BLOG_MEILISEARCH_API_KEY_CI;
+  if (!key) {
+    throw new Error(`need to set 'BLOG_MEILISEARCH_API_KEY_CI'`);
+  }
+  return key;
+}
+
+export function meilisearchIndexUid(): string {
+  const id = process.env.BLOG_MEILISEARCH_INDEX_BLOG;
+  if (!id) {
+    throw new Error(`need to set 'BLOG_MEILISEARCH_INDEX_BLOG'`);
+  }
+  return id;
+}
+
+export function meilisearchSearchAPIKey(): string {
+  const key = process.env.BLOG_MEILISEARCH_API_KEY_SEARCH;
+  if (!key) {
+    throw new Error(`need to set 'BLOG_MEILISEARCH_API_KEY_SEARCH'`);
+  }
+  return key;
+}

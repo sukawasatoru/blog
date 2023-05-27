@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2023 sukawasatoru
+ * Copyright 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-'use strict';
+import {MagnifyingGlassIcon} from '@heroicons/react/20/solid';
+import {JSX} from 'react';
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    './src/app/**/*.tsx',
-    './src/components/**/*.tsx',
-  ],
-  darkMode: 'class',
-  theme: {
-    extend: {},
-  },
-  plugins: [require('@tailwindcss/forms')],
-  safelist: [
-    process.env.NODE_ENV === 'development' && {pattern: /.*/},
-  ].filter(data => data),
-};
+export default function SearchPaletteIcon({onSearchClicked}: { onSearchClicked: () => void }): JSX.Element {
+  return (
+    <div
+      className="flex h-8 w-8 items-center justify-center rounded-lg shadow-md shadow-black/5 ring-1 ring-black/5 dark:bg-slate-700 dark:ring-inset dark:ring-white/5 cursor-pointer"
+      onClick={onSearchClicked}
+    >
+      <MagnifyingGlassIcon className="my-auto w-5 fill-slate-400"/>
+    </div>
+  );
+}

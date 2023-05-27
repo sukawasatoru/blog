@@ -16,13 +16,16 @@
 
 import {readFile} from 'fs/promises';
 import clsx from 'clsx';
+import {MeiliSearch} from 'meilisearch';
 import {Metadata, ResolvingMetadata} from 'next';
 import Link from 'next/link';
 import {compileMDX} from 'next-mdx-remote/rsc';
 import {FC, JSX, ReactElement, ReactNode} from 'react';
 import remarkGfm from 'remark-gfm';
 import {prism} from '@/app/docs/[stem]/_util/prism-wrapper';
-import {retrieveDocs} from '@/function/docs';
+import {DocEntry, retrieveDocs} from '@/function/docs';
+import {meilisearchBaseUrl, meilisearchCIAPIKey, meilisearchIndexUid} from '@/model/configuration';
+import {MeiliBlogDocEntry} from '@/model/meili-blog-doc-entry';
 
 interface Props {
   params: {
@@ -66,6 +69,8 @@ async function renderPage(stem: string): Promise<ReactElement> {
   const doc = docs.find(value => value.stem === stem)!;
   const matterFile = (await readFile(doc.filepath)).toString();
 
+  await updateMeilisearchDocument(doc, matterFile);
+
   const {content} = await compileMDX({
     source: matterFile,
     options: {
@@ -98,6 +103,22 @@ async function renderPage(stem: string): Promise<ReactElement> {
   });
 
   return content;
+}
+
+async function updateMeilisearchDocument(doc: DocEntry, content: string): Promise<void> {
+  const meiliDoc: MeiliBlogDocEntry = {
+    id: doc.stem,
+    title: doc.title,
+    content,
+  };
+
+  const meiliSearchClient = new MeiliSearch({
+    host: meilisearchBaseUrl(),
+    apiKey: meilisearchCIAPIKey(),
+  });
+
+  const meiliIndex = meiliSearchClient.index<MeiliBlogDocEntry>(meilisearchIndexUid());
+  await meiliIndex.addDocuments([meiliDoc]);
 }
 
 const Pre: FC<{ children: ReactNode; prism: typeof import('prismjs') }> = ({children, prism}) => {

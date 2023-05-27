@@ -17,7 +17,10 @@
 import {Metadata} from 'next';
 import Script from 'next/script';
 import {JSX, ReactNode} from 'react';
+import {AppProviders} from '@/app/_components/AppProviders';
 import DefaultHeader from '@/app/_components/DefaultHeader';
+import SearchPalette from '@/app/_components/SearchPalette';
+import {meilisearchBaseUrl, meilisearchIndexUid, meilisearchSearchAPIKey} from '@/model/configuration';
 import '@/style/global.css';
 
 export const metadata: Metadata = {
@@ -32,14 +35,17 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: { children: ReactNode }): JSX.Element {
   return (
     <html lang="ja">
-    <head>
-      {/*https://nextjs.org/docs/app/api-reference/functions/generate-metadata#unsupported-metadata*/}
-      <link rel="stylesheet" href="https://files.stork-search.net/releases/v1.5.0/basic.css"/>
-    </head>
     <body>
     <div className="container mx-auto max-w-5xl sm:px-6 py-8">
-      <DefaultHeader/>
-      {children}
+      <AppProviders>
+        <DefaultHeader/>
+        {children}
+        <SearchPalette
+          apiKey={meilisearchSearchAPIKey()}
+          baseUrl={meilisearchBaseUrl()}
+          index={meilisearchIndexUid()}
+        />
+      </AppProviders>
     </div>
     <Script
       id="add-prefs-color-scheme-class"

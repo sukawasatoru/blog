@@ -4,32 +4,53 @@ blog
 Development
 -----------
 
-```bash
-cd <path to repo>
+### Setup Meilisearch ###
 
-# <use stork>
-# build stork-builder.
-cd tools/stork-builder && cargo build --release && cd -
+```bash
+# download Meilisearch.
+# e.g. meilisearch v1.1.1 for m1 mac.
+gh release download v1.1.1 -R meilisearch/meilisearch -p meilisearch-macos-apple-silicon
+
+chmod +x meilisearch-macos-apple-silicon
+
+# launch Meilisearch w/ master key.
+./meilisearch-macos-apple-silicon --master-key <your master key>
+
+# create your good index name.
+BLOG_INDEX_NAME=<your index name>
+
+# setup api keys.
+# api key for ci.
+curl -H'content-type: application/json' -H'Authorization: Bearer <your master key>' -d'{"name": "Blog CI API Key", "description": "Update documents from Blog CI", "actions": ["documents.*"], "indexes": ["<your index name>"], "expiresAt": null}' 'http://localhost:7700/keys'
+
+# api key for search.
+curl -H'content-type: application/json' -H'Authorization: Bearer <your master key>' -d'{"name": "Blog Search API Key", "description": "Use it to search from frontend of blog", "actions": ["search"], "indexes": ["<your index name>"], "expiresAt": null}' 'http://localhost:7700/keys'
+
+# create index.
+curl -H'content-type: application/json' -H'Authorization: Bearer <your master key>' -d'{"uid": "<your index name>"}' 'http:/localhost:7700//indexes'
+```
+### Create .env.local ###
+
+```bash
+BLOG_MEILISEARCH_API_KEY_CI=<api key for ci>
+BLOG_MEILISEARCH_API_KEY_SEARCH=<api key for search>
+BLOG_MEILISEARCH_BASE_URL=<your base url>
+BLOG_MEILISEARCH_INDEX_BLOG=<your index name>
+```
+
+### Launch dev server ###
+
+```bash
+cd path/to/repo
 
 # build docs-parser.
 npm run docs-parser
 
-# build stork index.
-npm install
-npm run export
-tools/stork-builder/target/release/stork-builder -fo out/blog.st -m src/docs out
-
-# symlink for "npm start".
-npm run ln-s
-
-# enable stork configuration in configuration.ts
-# </use stork>
+# launch meilisearch in new terminal.
+cd path/to/meilisearch && ./meilisearch --master-key <your master key>
 
 # start Next.js
 npm run dev
-
-# unlink a symlink if used stork.
-unlink public/blog.st
 ```
 
 LICENSE

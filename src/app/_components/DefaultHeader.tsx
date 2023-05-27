@@ -17,19 +17,27 @@
 'use client';
 
 import Link from 'next/link';
-import {FC} from 'react';
-import {AppearanceSelector} from '@/app/_components/AppearanceSelector';
-import Stork from '@/app/_components/Stork';
+import {JSX, useCallback} from 'react';
+import {useRecoilState} from 'recoil';
+import AppearanceSelector from '@/app/_components/AppearanceSelector';
+import SearchPaletteIcon from '@/app/_components/SearchPaletteIcon';
+import {searchPaletteState} from '@/store/search-palette-state';
 
-const DefaultHeader: FC = () =>
-  <header className="mb-16 flex flex-row justify-between items-baseline">
-    <h1 className='text-xl text-neutral-600 font-medium tracking-wide mb-2 hover:underline dark:text-white'>
-      <Link href="/">
-        sukawasatoru.com
-      </Link>
-    </h1>
-    <Stork className='grow mx-8 hidden sm:block'/>
-    <AppearanceSelector className="my-auto" />
-  </header>;
+export default function DefaultHeader(): JSX.Element {
+  const [, setOpen] = useRecoilState(searchPaletteState);
+  const onSearchClicked = useCallback(() => setOpen(true), [setOpen]);
 
-export default DefaultHeader;
+  return (
+    <header className="mb-16 flex flex-row justify-between items-baseline">
+      <h1 className="text-xl text-neutral-600 font-medium tracking-wide mb-2 hover:underline dark:text-white">
+        <Link href="/">
+          sukawasatoru.com
+        </Link>
+      </h1>
+      <div className="grow flex justify-end gap-3">
+        <SearchPaletteIcon onSearchClicked={onSearchClicked} />
+        <AppearanceSelector />
+      </div>
+    </header>
+  );
+}

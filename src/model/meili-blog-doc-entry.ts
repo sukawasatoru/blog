@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, 2023 sukawasatoru
+ * Copyright 2023 sukawasatoru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-'use strict';
-
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    './src/app/**/*.tsx',
-    './src/components/**/*.tsx',
-  ],
-  darkMode: 'class',
-  theme: {
-    extend: {},
-  },
-  plugins: [require('@tailwindcss/forms')],
-  safelist: [
-    process.env.NODE_ENV === 'development' && {pattern: /.*/},
-  ].filter(data => data),
-};
+export interface MeiliBlogDocEntry {
+  /**
+   * An document ID.
+   *
+   * combination of a-z, A-Z, 0-9, hyphens(-) and underscores(_).
+   *
+   * @see https://www.meilisearch.com/docs/learn/core_concepts/primary_key#document-id
+   */
+  id: string;
+  title: string;
+  content: string;
+}
