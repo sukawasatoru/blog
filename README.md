@@ -27,7 +27,7 @@ curl -H'content-type: application/json' -H'Authorization: Bearer <your master ke
 curl -H'content-type: application/json' -H'Authorization: Bearer <your master key>' -d'{"name": "Blog Search API Key", "description": "Use it to search from frontend of blog", "actions": ["search"], "indexes": ["<your index name>"], "expiresAt": null}' 'http://localhost:7700/keys'
 
 # create index.
-curl -H'content-type: application/json' -H'Authorization: Bearer <your master key>' -d'{"uid": "<your index name>"}' 'http:/localhost:7700//indexes'
+curl -H'content-type: application/json' -H'Authorization: Bearer <your master key>' -d'{"uid": "<your index name>"}' 'http://localhost:7700/indexes'
 ```
 ### Create .env.local ###
 
