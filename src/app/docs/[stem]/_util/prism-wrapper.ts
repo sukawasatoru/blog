@@ -23,6 +23,7 @@ import 'prismjs';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-diff';
 import 'prismjs/components/prism-groovy';
+import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-jsx';
 import 'prismjs/components/prism-kotlin';
 import 'prismjs/components/prism-properties';
