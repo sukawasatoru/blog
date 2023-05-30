@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
+import Link from 'next/link';
 import {JSX, ReactNode} from 'react';
 import '@/app/docs/[stem]/docs.css';
 
 export default function DocsLayout({children}: { children: ReactNode }): JSX.Element {
   return <>
     {children}
+    <footer>
+      <Link className="text-sky-600 hover:underline" href="/">
+        Top
+      </Link>
+    </footer>
   </>;
 }

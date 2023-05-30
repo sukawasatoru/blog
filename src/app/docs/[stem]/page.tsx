@@ -18,9 +18,8 @@ import {readFile} from 'fs/promises';
 import clsx from 'clsx';
 import {MeiliSearch} from 'meilisearch';
 import {Metadata, ResolvingMetadata} from 'next';
-import Link from 'next/link';
 import {compileMDX} from 'next-mdx-remote/rsc';
-import {FC, JSX, ReactElement, ReactNode} from 'react';
+import {FC, JSX, ReactNode} from 'react';
 import remarkGfm from 'remark-gfm';
 import {prism} from '@/app/docs/[stem]/_util/prism-wrapper';
 import {DocEntry, retrieveDocs} from '@/function/docs';
@@ -51,19 +50,14 @@ export default async function Docs({params}: Props): Promise<JSX.Element> {
   const {stem} = params;
 
   const rendered = await renderPage(stem);
-  return <>
+  return (
     <main>
       {rendered}
     </main>
-    <footer>
-      <Link className="text-sky-600 hover:underline" href="/">
-        Top
-      </Link>
-    </footer>
-  </>;
+  );
 }
 
-async function renderPage(stem: string): Promise<ReactElement> {
+async function renderPage(stem: string): Promise<JSX.Element> {
   const docs = await retrieveDocs();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const doc = docs.find(value => value.stem === stem)!;

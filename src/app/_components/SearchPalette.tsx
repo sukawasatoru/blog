@@ -140,8 +140,9 @@ function ListItem({active, title}: { active: boolean; title: string }): JSX.Elem
     <>
       <span
         className="ml-3 flex-auto truncate dark:text-gray-400"
-        dangerouslySetInnerHTML={{__html: title}}
-      />
+      >
+        {title}
+      </span>
       {active && (
         <ChevronRightIcon
           className="ml-3 h-5 w-5 flex-none text-gray-400 dark:text-white"
@@ -155,7 +156,9 @@ function ListItem({active, title}: { active: boolean; title: string }): JSX.Elem
 function PreviewDocument({content}: {content: string}): JSX.Element {
   return (
     <div className="hidden h-96 w-1/2 flex-none flex-col divide-y divide-gray-100 overflow-y-auto overflow-x-hidden sm:flex">
-      <div className="p-6 dark:text-gray-400" dangerouslySetInnerHTML={{__html: content}} />
+      <div className="p-6 dark:text-gray-400">
+        {content}
+      </div>
     </div>
   );
 }
@@ -206,11 +209,9 @@ function useMeiliSearch(
         const result = await client.search(
           query,
           {
-            limit: 10,
-            cropLength: 50,
-            highlightPreTag: '<em class="bg-yellow-200 dark:text-gray-900">',
-            attributesToHighlight: ['title', 'content'],
-            attributesToRetrieve: ['id'],
+            limit: query ? 10 : 3,
+            cropLength: query ? 100 : 50,
+            attributesToRetrieve: ['id', 'title'],
             attributesToCrop: ['content'],
             sort: query ? undefined : ['createdAt:desc'],
           },
