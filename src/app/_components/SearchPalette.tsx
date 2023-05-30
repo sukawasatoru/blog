@@ -26,17 +26,21 @@ import {useRouter} from 'next/navigation';
 import {Fragment, JSX, useCallback, useEffect, useMemo, useState} from 'react';
 import {useRecoilState} from 'recoil';
 import {MeiliBlogDocEntry} from '@/model/meili-blog-doc-entry';
-import {searchPaletteState} from '@/store/search-palette-state';
+import {
+  isPlaceholderFetchedState,
+  searchPalettePlaceholderResultState,
+  searchPaletteState,
+} from '@/store/search-palette-state';
 
 export default function SearchPalette({apiKey, baseUrl, index}: { apiKey: string; baseUrl: string; index: string }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useRecoilState(searchPaletteState);
   const queryResult = useMeiliSearch({apiKey, baseUrl, index, query});
 
-  const afterLeave = useCallback(() => setQuery(''), []);
+  const afterLeave = useCallback(() => setQuery(''), [setQuery]);
 
   const router = useRouter();
-  const onSelected = useCallback((value: MeiliBlogDocEntry | null) => {
+  const onSelected = useCallback((value: BlogDocEntry | null) => {
     setOpen(false);
     value && router.push(`docs/${value.id}` as Route);
   }, [router, setOpen]);
@@ -68,7 +72,7 @@ export default function SearchPalette({apiKey, baseUrl, index}: { apiKey: string
           >
             <Dialog.Panel className="mx-auto max-w-3xl transform divide-y divide-gray-100 dark:divide-gray-500 dark:divide-opacity-20 overflow-hidden rounded-xl bg-white dark:bg-gray-900 shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
               <Combobox onChange={onSelected}>
-                {({ activeOption }: {activeOption: MeiliBlogDocEntry | null }) => (
+                {({ activeOption }: {activeOption: Omit<MeiliBlogDocEntry, 'createdAt'> | null }) => (
                   <>
                     <div className="relative">
                       <MagnifyingGlassIcon
@@ -112,7 +116,10 @@ export default function SearchPalette({apiKey, baseUrl, index}: { apiKey: string
                           </div>
                         </div>
 
-                        {activeOption && <PreviewDocument content={activeOption.content}/>}
+                        {activeOption ?
+                          <PreviewDocument content={activeOption.content}/> :
+                          (queryResult.length && <PreviewDocument content={queryResult[0].content}/>)
+                        }
                       </Combobox.Options>
                     )}
 
@@ -165,9 +172,11 @@ function NoResult(): JSX.Element {
   );
 }
 
+type BlogDocEntry = Omit<MeiliBlogDocEntry, 'createdAt'>;
+
 function useMeiliSearch(
   {apiKey, baseUrl, index, query}: { apiKey: string; baseUrl: string; index: string; query: string },
-): Array<MeiliBlogDocEntry> {
+): Array<BlogDocEntry> {
   const client = useMemo(() =>
       new MeiliSearch({
         host: baseUrl,
@@ -176,12 +185,16 @@ function useMeiliSearch(
         .index(index)
     , [apiKey, baseUrl, index]);
 
-  const [result, setResult] = useState<MeiliBlogDocEntry[]>([]);
+  const [isPlaceholderFetched, setIsFetched] = useRecoilState(isPlaceholderFetchedState);
+  const [placeholderResult, setPlaceholderResults] = useRecoilState(searchPalettePlaceholderResultState);
+  const [queryResult, setQueryResult] = useState<BlogDocEntry[]>([]);
 
   useEffect(() => {
     if (!query) {
-      setResult([]);
-      return;
+      if (isPlaceholderFetched) {
+        return;
+      }
+      setIsFetched(true);
     }
 
     const abortController = new AbortController();
@@ -199,18 +212,22 @@ function useMeiliSearch(
             attributesToHighlight: ['title', 'content'],
             attributesToRetrieve: ['id'],
             attributesToCrop: ['content'],
+            sort: query ? undefined : ['createdAt:desc'],
           },
           {
             signal,
           });
 
-        setResult(
-          result.hits.map((data) => ({
+        const newData = result.hits.map((data) => ({
             id: data.id,
             title: data._formatted?.title ?? '',
             content: data._formatted?.content ?? '',
-          }))
-        );
+          }));
+
+        setPlaceholderResults((current) => current.length || query ? current : newData);
+
+        signal.throwIfAborted();
+        setQueryResult((current) => query ? newData : current);
       } catch (e) {
         if (e instanceof MeiliSearchCommunicationError) {
           if (e.message === 'The operation was aborted. ') {
@@ -230,9 +247,13 @@ function useMeiliSearch(
     })();
 
     return () => {
+      if (!query) {
+        // for placeholder search.
+        return;
+      }
       abortController.abort();
     };
-  }, [client, query]);
+  }, [client, isPlaceholderFetched, query, setIsFetched, setPlaceholderResults]);
 
-  return result;
+  return query ? queryResult : placeholderResult;
 }

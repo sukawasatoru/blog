@@ -108,6 +108,7 @@ async function renderPage(stem: string): Promise<ReactElement> {
 async function updateMeilisearchDocument(doc: DocEntry, content: string): Promise<void> {
   const meiliDoc: MeiliBlogDocEntry = {
     id: doc.stem,
+    createdAt: doc.firstEdition.toZonedDateTime({timeZone: 'Asia/Tokyo'}).epochSeconds,
     title: doc.title,
     content,
   };

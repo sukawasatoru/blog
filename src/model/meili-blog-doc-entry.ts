@@ -23,6 +23,8 @@ export interface MeiliBlogDocEntry {
    * @see https://www.meilisearch.com/docs/learn/core_concepts/primary_key#document-id
    */
   id: string;
+
+  createdAt: number;
   title: string;
   content: string;
 }

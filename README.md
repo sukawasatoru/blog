@@ -28,6 +28,8 @@ curl -H'content-type: application/json' -H'Authorization: Bearer <your master ke
 
 # create index.
 curl -H'content-type: application/json' -H'Authorization: Bearer <your master key>' -d'{"uid": "<your index name>"}' 'http://localhost:7700/indexes'
+
+curl -v -H'content-type: application/json' -H'Authorization: Bearer <your master key>' -XPUT -d'["createdAt"]' 'http://localhost:7700/indexes/:your_index_name/settings/sortable-attributes'
 ```
 ### Create .env.local ###
 

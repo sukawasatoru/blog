@@ -15,8 +15,19 @@
  */
 
 import {atom} from 'recoil';
+import {MeiliBlogDocEntry} from '@/model/meili-blog-doc-entry';
 
 export const searchPaletteState = atom({
   key: 'SearchPalette',
   default: false,
+});
+
+export const isPlaceholderFetchedState = atom({
+  key: 'IsPlaceholderFetched',
+  default: false,
+});
+
+export const searchPalettePlaceholderResultState = atom<Omit<MeiliBlogDocEntry, 'createdAt'>[]>({
+  key: 'SearchPalettePlaceholderResult',
+  default: [],
 });
