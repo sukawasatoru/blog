@@ -19,9 +19,6 @@ query,
 {
   // placeholder search 時は 3件だけ返す.
   limit: query ? 10 : 3,
-  // placeholder search 時はより crop して返す.
-  attributesToRetrieve: ['id', 'title'],
-  attributesToCrop: ['content'],
   // placeholder search だけドキュメントを降順で返す.
   sort: query ? undefined : ['createdAt:desc'],
 }
