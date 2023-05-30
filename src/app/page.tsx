@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import {Temporal} from '@js-temporal/polyfill';
 import {Route} from 'next';
 import Link from 'next/link';
-import {Temporal} from 'proposal-temporal';
 import {JSX, memo} from 'react';
 import {retrieveDocs} from '@/function/docs';
 

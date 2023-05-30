@@ -15,9 +15,9 @@
  */
 
 import {readFile, writeFile} from 'fs/promises';
+import {Temporal} from '@js-temporal/polyfill';
 import {Metadata} from 'next';
 import {compileMDX} from 'next-mdx-remote/rsc';
-import {Temporal} from 'proposal-temporal';
 import {JSX} from 'react';
 import remarkGfm from 'remark-gfm';
 import {retrieveDocs} from '@/function/docs';

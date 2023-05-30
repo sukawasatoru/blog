@@ -16,7 +16,7 @@
 
 import {PathLike} from 'fs';
 import {readdir, readFile, stat} from 'fs/promises';
-import {Temporal} from 'proposal-temporal';
+import {Temporal} from '@js-temporal/polyfill';
 
 export type DocEntry = {
   filepath: PathLike;
