@@ -63,7 +63,7 @@ async function renderPage(stem: string): Promise<JSX.Element> {
   const doc = docs.find(value => value.stem === stem)!;
   const matterFile = (await readFile(doc.filepath)).toString();
 
-  await updateMeilisearchDocument(doc, matterFile);
+  await updateMeilisearchDocument(doc, doc.content);
 
   const {content} = await compileMDX({
     source: matterFile,

@@ -37,6 +37,7 @@ macro_rules! console_log {
 #[serde(rename_all = "camelCase")]
 pub struct DocEntry {
     title: String,
+    content: String,
     first_edition: String,
     last_modify: Option<String>,
 }
@@ -46,6 +47,11 @@ impl DocEntry {
     #[wasm_bindgen(getter)]
     pub fn title(&self) -> String {
         self.title.to_string()
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn content(&self) -> String {
+        self.content.to_string()
     }
 
     #[wasm_bindgen(getter = firstEdition)]
@@ -67,20 +73,20 @@ pub fn parse_docs(doc: &str) -> Option<DocEntry> {
     let mut title = None;
     let mut first_edition = None;
     let mut last_modify = None;
-    let mut prev_line = vec![];
+    let mut prev_lines = vec![];
     let first_regex = regex::Regex::new(r#"^([-0-9]*) \(First edition\)"#).unwrap();
     let modify_regex = regex::Regex::new(r#"^([-0-9]*) \(Last modify\)"#).unwrap();
     let title_sep_regex = regex::Regex::new(r#"^=+$"#).unwrap();
 
-    for entry in doc.lines() {
+    for entry in doc.trim().lines() {
         if title.is_none() {
-            prev_line.push(entry);
+            prev_lines.push(entry);
 
-            if 1 < prev_line.len() {
+            if 1 < prev_lines.len() {
                 if title_sep_regex.is_match(entry) {
-                    title = Some(prev_line[0].to_string());
+                    title = Some(prev_lines[0].to_string());
+                    prev_lines.clear();
                 }
-                prev_line.remove(0);
             }
             continue;
         }
@@ -92,15 +98,12 @@ pub fn parse_docs(doc: &str) -> Option<DocEntry> {
             continue;
         }
 
-        if !is_parse_date {
-            continue;
-        }
-
-        if first_edition.is_none() {
+        if is_parse_date && first_edition.is_none() {
             match first_regex.captures(entry) {
                 Some(data) => match chrono::NaiveDate::from_str(&data[1]) {
                     Ok(data) => {
                         first_edition = Some(data);
+                        continue;
                     }
                     Err(_) => {
                         // the timestamp marker may be body content.
@@ -111,21 +114,25 @@ pub fn parse_docs(doc: &str) -> Option<DocEntry> {
                     is_parse_date = false;
                 }
             };
+        }
 
+        if !is_parse_date {
+            prev_lines.push(entry);
             continue;
         }
 
         if let Some(data) = modify_regex.captures(entry) {
             match chrono::NaiveDate::from_str(&data[1]) {
-                Ok(data) => last_modify = Some(data),
+                Ok(data) => {
+                    last_modify = Some(data);
+                    break;
+                }
                 Err(e) => {
                     console_log!("unexpected Last modify: {:?}", e);
                     return None;
                 }
             }
         }
-
-        is_parse_date = false;
     }
 
     if title.is_none() {
@@ -138,8 +145,18 @@ pub fn parse_docs(doc: &str) -> Option<DocEntry> {
         return None;
     }
 
+    // \n
+    prev_lines.remove(prev_lines.len() - 1);
+    // - - -
+    prev_lines.remove(prev_lines.len() - 1);
+    // \n
+    prev_lines.remove(prev_lines.len() - 1);
+    // \n
+    prev_lines.remove(0);
+
     Some(DocEntry {
         title: title.unwrap(),
+        content: prev_lines.join("\n"),
         first_edition: first_edition.unwrap().to_string(),
         last_modify: last_modify.map(|data| data.to_string()),
     })
@@ -172,6 +189,7 @@ timestamp
 
         let expect = Some(DocEntry {
             title: "Hello test".into(),
+            content: r#"this is body"#.into(),
             first_edition: "2021-02-13".into(),
             last_modify: None,
         });
@@ -196,6 +214,7 @@ timestamp
 
         let expect = Some(DocEntry {
             title: "Hello test".into(),
+            content: r#"this is body"#.into(),
             first_edition: "2021-02-13".into(),
             last_modify: Some("2021-03-01".into()),
         });

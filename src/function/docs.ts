@@ -23,6 +23,7 @@ export type DocEntry = {
   stem: string;
   extension: 'md' | 'mdx';
   title: string;
+  content: string;
   firstEdition: Temporal.PlainDate;
   lastModify?: Temporal.PlainDate;
 };
@@ -53,9 +54,10 @@ export const retrieveDocs = async (): Promise<DocEntry[]> => {
       filepath,
       stem: filename.substring(0, filename.lastIndexOf('.')),
       extension: filename.substring(filename.lastIndexOf('.') + 1) as 'md' | 'mdx',
+      title: docInfo.title,
+      content: docInfo.content,
       firstEdition: Temporal.PlainDate.from(docInfo.firstEdition),
       lastModify: docInfo.lastModify ? Temporal.PlainDate.from(docInfo.lastModify) : undefined,
-      title: docInfo.title,
     });
 
     docInfo.free();
