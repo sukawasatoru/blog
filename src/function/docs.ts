@@ -16,6 +16,7 @@
 
 import {PathLike} from 'fs';
 import {readdir, readFile, stat} from 'fs/promises';
+import {cwd} from 'process';
 import {Temporal} from '@js-temporal/polyfill';
 
 export type DocEntry = {
@@ -29,7 +30,7 @@ export type DocEntry = {
 };
 
 export const retrieveDocs = async (): Promise<DocEntry[]> => {
-  const docsPath = `${process.cwd()}/src/docs`;
+  const docsPath = docsDirPath();
   const names = await readdir(docsPath);
 
   const ret: DocEntry[] = [];
@@ -39,29 +40,57 @@ export const retrieveDocs = async (): Promise<DocEntry[]> => {
       continue;
     }
 
-    const filepath = `${docsPath}/${filename}`;
-    const entryStat = await stat(`${docsPath}/${filename}`);
-    if (!entryStat.isFile()) {
-      continue;
-    }
-
-    const docInfo = (await import('docs-parser')).parseDocs((await readFile(filepath)).toString());
-    if (!docInfo) {
-      throw new Error(`failed to parse document: ${filepath}`);
-    }
-
-    ret.push({
-      filepath,
+    const doc = await retrieveDoc({
       stem: filename.substring(0, filename.lastIndexOf('.')),
       extension: filename.substring(filename.lastIndexOf('.') + 1) as 'md' | 'mdx',
-      title: docInfo.title,
-      content: docInfo.content,
-      firstEdition: Temporal.PlainDate.from(docInfo.firstEdition),
-      lastModify: docInfo.lastModify ? Temporal.PlainDate.from(docInfo.lastModify) : undefined,
     });
 
-    docInfo.free();
+    ret.push(doc);
   }
 
   return ret;
 };
+
+export const retrieveDoc = async ({stem, extension}: { stem: string; extension?: 'md' | 'mdx' }): Promise<DocEntry> => {
+  const docsPath = docsDirPath();
+
+  let ext: 'md' | 'mdx';
+  if (extension) {
+    ext = extension;
+  } else {
+    try {
+      await stat(`${docsPath}/${stem}.md`);
+      ext = 'md';
+    } catch (e) {
+      await stat(`${docsPath}/${stem}.mdx`);
+      ext = 'mdx';
+    }
+  }
+
+  const filepath = `${docsPath}/${stem}.${ext}`;
+  const entryStat = await stat(filepath);
+  if (!entryStat.isFile()) {
+    throw new Error(`not file: ${filepath}`);
+  }
+
+  const docInfo = (await import('docs-parser')).parseDocs((await readFile(filepath)).toString());
+  if (!docInfo) {
+    throw new Error(`failed to parse document: ${filepath}`);
+  }
+
+  const ret: DocEntry = {
+    filepath,
+    stem: stem,
+    extension: ext,
+    title: docInfo.title,
+    content: docInfo.content,
+    firstEdition: Temporal.PlainDate.from(docInfo.firstEdition),
+    lastModify: docInfo.lastModify ? Temporal.PlainDate.from(docInfo.lastModify) : undefined,
+  };
+
+  docInfo.free();
+
+  return ret;
+};
+
+const docsDirPath = (): string => `${cwd()}/src/docs`;

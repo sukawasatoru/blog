@@ -22,7 +22,7 @@ import {compileMDX} from 'next-mdx-remote/rsc';
 import {FC, JSX, ReactNode} from 'react';
 import remarkGfm from 'remark-gfm';
 import {prism} from '@/app/docs/[stem]/_util/prism-wrapper';
-import {DocEntry, retrieveDocs} from '@/function/docs';
+import {DocEntry, retrieveDoc, retrieveDocs} from '@/function/docs';
 import {meilisearchBaseUrl, meilisearchCIAPIKey, meilisearchIndexUid} from '@/model/configuration';
 import {MeiliBlogDocEntry} from '@/model/meili-blog-doc-entry';
 
@@ -58,15 +58,15 @@ export default async function Docs({params}: Props): Promise<JSX.Element> {
 }
 
 async function renderPage(stem: string): Promise<JSX.Element> {
-  const docs = await retrieveDocs();
+  const doc = await retrieveDoc({stem});
+
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const doc = docs.find(value => value.stem === stem)!;
-  const matterFile = (await readFile(doc.filepath)).toString();
+  const source = (await readFile(doc.filepath)).toString();
 
   await updateMeilisearchDocument(doc, doc.content);
 
   const {content} = await compileMDX({
-    source: matterFile,
+    source,
     options: {
       mdxOptions: {
         development: process.env.NODE_ENV === 'development',
