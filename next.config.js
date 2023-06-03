@@ -16,9 +16,6 @@
 
 'use strict';
 
-const {access, symlink} = require('fs/promises');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-
 /** @type {import('next').NextConfig} */
 const config = {
   experimental: {
@@ -31,10 +28,10 @@ const config = {
   webpack: (config, options) => {
     config.experiments.syncWebAssembly = true;
 
-    if (options.isServer) {
-      options.dev && config.plugins.push(new ForkTsCheckerWebpackPlugin());
+    // https://github.com/vercel/next.js/issues/25852#issuecomment-1057059000
+    if (!options.dev && options.isServer) {
+      const {access, symlink} = require('fs/promises');
 
-      // https://github.com/vercel/next.js/issues/25852#issuecomment-1057059000
       config.plugins.push(
         new (class {
           apply(compiler) {
@@ -62,6 +59,13 @@ const config = {
           }
         })(),
       );
+    }
+
+    if (options.isServer) {
+      if (options.dev) {
+        const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+        config.plugins.push(new ForkTsCheckerWebpackPlugin());
+      }
 
       if (process.env.BUNDLE_ANALYZER) {
         const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');

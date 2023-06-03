@@ -33,11 +33,6 @@ macro_rules! console_log {
 }
 
 #[wasm_bindgen]
-pub fn greet() {
-    console_log!("Hello {}", "world");
-}
-
-#[wasm_bindgen]
 #[derive(Debug, Eq, PartialEq, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DocEntry {
@@ -87,6 +82,7 @@ pub fn parse_docs(doc: &str) -> Option<DocEntry> {
                 }
                 prev_line.remove(0);
             }
+            continue;
         }
 
         if entry == "timestamp  " {
@@ -138,7 +134,7 @@ pub fn parse_docs(doc: &str) -> Option<DocEntry> {
     }
 
     if first_edition.is_none() {
-        console_log!("the first_efition is None");
+        console_log!("the first_edition is None");
         return None;
     }
 

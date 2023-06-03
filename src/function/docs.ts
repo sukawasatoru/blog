@@ -28,8 +28,6 @@ export type DocEntry = {
 };
 
 export const retrieveDocs = async (): Promise<DocEntry[]> => {
-  const {parseDocs} = await import('docs-parser');
-
   const docsPath = `${process.cwd()}/src/docs`;
   const names = await readdir(docsPath);
 
@@ -46,7 +44,7 @@ export const retrieveDocs = async (): Promise<DocEntry[]> => {
       continue;
     }
 
-    const docInfo = parseDocs((await readFile(filepath)).toString());
+    const docInfo = (await import('docs-parser')).parseDocs((await readFile(filepath)).toString());
     if (!docInfo) {
       throw new Error(`failed to parse document: ${filepath}`);
     }
@@ -59,6 +57,8 @@ export const retrieveDocs = async (): Promise<DocEntry[]> => {
       lastModify: docInfo.lastModify ? Temporal.PlainDate.from(docInfo.lastModify) : undefined,
       title: docInfo.title,
     });
+
+    docInfo.free();
   }
 
   return ret;
