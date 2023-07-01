@@ -27,7 +27,7 @@ data class MyImage(
 
 App は Server から Item を取得するので Server を実装します。 Rust + [Hyper](https://github.com/hyperium/hyper) + [Juniper](https://github.com/graphql-rust/juniper) で [適当に実装します](https://github.com/sukawasatoru/android-photogallery/blob/master/tools/server/src/main.rs)。
 
-<img alt="" src="/2021-03-28-graphiql.png" height="460" />
+<img alt="" src="https://bucket.sukawasatoru.com/2021-03-28-graphiql.png" height="460" />
 
 Android から GraphQL を扱うために今回は [Apollo](https://www.apollographql.com/docs/android/) を使います。
 
@@ -268,7 +268,7 @@ class DefaultImageRepository @Inject constructor(
 では App を起動しつつ Logcat を確認してみましょう。予想通りであれば 1000件取得するごとに *@@@@ succeeded* が出力されるので、それがしばらく表示されたのちに OOM します。
 
 <video controls playsInline width="832">
-	<source src="/2021-03-28-logcat.mp4" type="video/mp4"/>
+	<source src="https://bucket.sukawasatoru.com/2021-03-28-logcat.mp4" type="video/mp4"/>
 </video>
 
 40秒あたりから Blocking GC が呼び出されるようになり 1分あたりからほとんど身動きが取れなくなって OOM していますね。
@@ -358,7 +358,7 @@ LoadParams.key に Paging に使用する情報、 GraphQL では [after (Cursor
 では、最低限 Paging library に必要な実装はできたので App を起動してひたすらスクロールしてみましょう。こちらも OOM するでしょうか。
 
 <video controls playsInline width="832">
-	<source src="/2021-03-28-logcat-paging.mp4" type="video/mp4"/>
+	<source src="https://bucket.sukawasatoru.com/2021-03-28-logcat-paging.mp4" type="video/mp4"/>
 </video>
 
 何回か試しましたが 30万件前後で OOM します。なんだ Paging library もダメなのか、、、と思いながらドキュメントを眺めていると PagingConfig に *maxSize* というそれっぽい Field がありました。こちらを試すと Blocking GC が発生せず軽々と 30万件を読み込むことができました。よかったですね。

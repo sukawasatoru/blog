@@ -200,7 +200,7 @@ Jenkins の Slave の設定
 Credentials に登録したらそれを用いて Slave を登録する。
 *Manage Jenkins* -> *Manage Nodes* から *New Node* で設定を行う。
 
-![jenkins-slave.png](/jenkins-slave.png)
+![jenkins-slave.png](https://bucket.sukawasatoru.com/jenkins-slave.png)
 
 *Remote root directory* は Build 用に作成した user の home directory を指定した。  
 *Labels* は Jenkinsfile から使用する Slave を設定するために付けた。  

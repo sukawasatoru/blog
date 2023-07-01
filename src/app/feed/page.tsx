@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {readFile, writeFile} from 'fs/promises';
+import {mkdir, readFile, writeFile} from 'fs/promises';
 import {Temporal} from '@js-temporal/polyfill';
 import {Metadata} from 'next';
 import {compileMDX} from 'next-mdx-remote/rsc';
@@ -82,5 +82,6 @@ async function generateFeed(): Promise<void> {
   buf += `  </channel>
 </rss>`;
 
+  await mkdir(`${process.cwd()}/public`, {recursive: true});
   await writeFile(`${process.cwd()}/public/feed.xml`, buf);
 }
